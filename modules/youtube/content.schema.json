@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "talks content",
+  "type": "object",
+  "properties": {
+    "eyebrow": { "type": "string" },
+    "heading": { "type": "string" },
+    "note": { "type": "string" },
+    "countOverride": {},
+    "talks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "img", "thumb"],
+        "properties": {
+          "title": { "type": "string" },
+          "videoId": { "type": "string", "description": "YouTube video id -- click-to-embed. Use `href` instead for non-YouTube talks." },
+          "href": { "type": "string", "description": "External link used instead of videoId (e.g. a SlideShare deck)." },
+          "img": { "type": "string", "description": "Module-relative path to the stage cover, resolved via ctx.asset()." },
+          "thumb": { "type": "string", "description": "Module-relative path to the rail thumbnail, resolved via ctx.asset()." },
+          "actions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["label", "href"],
+              "properties": {
+                "label": { "type": "string" },
+                "href": { "type": "string", "description": "External URL, or a module-relative asset path (e.g. downloads/x.pdf)." }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

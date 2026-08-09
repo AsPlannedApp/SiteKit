@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "hero content",
+  "type": "object",
+  "required": ["name", "tagline"],
+  "properties": {
+    "eyebrow": { "type": "string" },
+    "name": { "type": "string" },
+    "nameHighlight": { "type": "string", "description": "Part of the name rendered in the brand color, e.g. a surname initial." },
+    "tagline": { "type": "string" },
+    "avatar": { "type": "string", "description": "Optional module-relative image path, resolved via ctx.asset()." },
+    "ctas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "href"],
+        "properties": {
+          "label": { "type": "string" },
+          "shortLabel": { "type": "string", "description": "Shown instead of label under ~600px. Defaults to label." },
+          "href": { "type": "string" },
+          "icon": { "type": "string", "description": "Tabler icon class, e.g. ti-mail" },
+          "variant": { "type": "string", "enum": ["opposite", "ghost"] },
+          "external": { "type": "boolean" }
+        }
+      }
+    },
+    "issueIndexLabel": { "type": "string" }
+  }
+}

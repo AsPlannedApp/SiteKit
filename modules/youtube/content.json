@@ -1,0 +1,43 @@
+{
+  "eyebrow": "Feature",
+  "heading": "YouTube Playlist",
+  "note": "Video, demos, and technical presentations",
+  "talks": [
+    {
+      "title": "Tetris — Official Trailer | Apple TV",
+      "videoId": "-BLM1naCfME",
+      "img": "covers/tetris.big.webp",
+      "thumb": "covers/tetris.small.webp",
+      "actions": [
+        { "label": "Watch", "href": "https://tv.apple.com/us/movie/tetris/umc.cmc.4evmgcam356pzgxs2l7a18d7b" }
+      ]
+    },
+    {
+      "title": "Gaming Historian: The Story of Tetris",
+      "videoId": "_fQtxKmgJC8"
+    },
+    {
+      "title": "How Graphics worked on the Nintendo Game Boy",
+      "videoId": "zQE1K074v3s",
+      "actions": [
+        { "label": "Podcast", "href": "https://player.fm/series/the-real-mvp" }
+      ]
+    },
+    {
+      "title": "How Graphics worked on the Nintendo Game Boy Color",
+      "videoId": "ZEJVOH6Pxkg",
+      "actions": [
+        { "label": "Watch", "href": "https://www.youtube.com/watch?v=ZEJVOH6Pxkg" }
+      ]
+    },
+    {
+      "title": "Retro Tech: Game Boy\n",
+      "videoId": "Oy8zSYKkczI",
+      "img": "covers/gameboy.big.png",
+      "thumb": "covers/gameboy.small.avif",
+      "actions": [
+        { "label": "YouTube Channel", "href": "https://www.youtube.com/@mkbhd" }
+      ]
+    }
+  ]
+}

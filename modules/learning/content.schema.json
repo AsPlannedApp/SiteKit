@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "learning content",
+  "type": "object",
+  "properties": {
+    "eyebrow": { "type": "string" },
+    "heading": { "type": "string" },
+    "note": { "type": "string" },
+    "panelLabel": { "type": "string" },
+    "panelNote": { "type": "string" },
+    "miniBadgesLabel": { "type": "string" },
+    "countOverride": { "description": "Overrides the derived badge count in the header nav / hero issue-index." },
+    "badges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["image", "title", "issuer"],
+        "properties": {
+          "image": { "type": "string", "description": "module-relative path, resolved via ctx.asset()" },
+          "title": { "type": "string" },
+          "issuer": { "type": "string" }
+        }
+      }
+    },
+    "miniBadges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["icon", "label", "issuer"],
+        "properties": {
+          "icon": { "type": "string", "description": "Tabler icon class, e.g. ti-send" },
+          "label": { "type": "string" },
+          "issuer": { "type": "string" }
+        }
+      }
+    }
+  }
+}

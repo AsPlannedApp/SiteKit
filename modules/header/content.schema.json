@@ -1,0 +1,8 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "header content",
+  "type": "object",
+  "properties": {
+    "note": { "type": "string", "description": "Small italic note on the right of the nav, e.g. an issue/version label. Omit to render nothing." }
+  }
+}

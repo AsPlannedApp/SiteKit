@@ -1,0 +1,28 @@
+/*!
+ * Tabler Icons 3.31.0 by tabler - https://tabler.io
+ * License - https://github.com/tabler/tabler-icons/blob/master/LICENSE
+ * Subset: only the 19 icon glyphs actually used on this page (see fonts/tabler-icons.min.css
+ * for the full set). Regenerate this list if new .ti-* classes are added to index.html.
+ */
+@font-face{font-family:"tabler-icons";font-style:normal;font-weight:400;font-display:swap;src:url("./tabler-icons.woff2") format("woff2")}
+.ti{font-family:"tabler-icons" !important;speak:none;font-style:normal;font-weight:normal;font-variant:normal;text-transform:none;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.ti-arrow-up-right:before{content:"\ea24"}
+.ti-article:before{content:"\f1e2"}
+.ti-brand-github:before{content:"\ec1c"}
+.ti-brand-gitlab:before{content:"\ec1d"}
+.ti-brand-typescript:before{content:"\f5f1"}
+.ti-brand-vscode:before{content:"\f3a0"}
+.ti-brand-youtube:before{content:"\ec90"}
+.ti-calendar-clock:before{content:"\fd2e"}
+.ti-calendar-stats:before{content:"\ee20"}
+.ti-certificate:before{content:"\ed76"}
+.ti-chevron-down:before{content:"\ea5f"}
+.ti-download:before{content:"\ea96"}
+.ti-git-merge:before{content:"\eab5"}
+.ti-mail:before{content:"\eae5"}
+.ti-message-chatbot:before{content:"\f38a"}
+.ti-microphone-2:before{content:"\ef2c"}
+.ti-news:before{content:"\eafd"}
+.ti-send:before{content:"\eb1e"}
+.ti-terminal-2:before{content:"\ebef"}
+.ti-writing-sign:before{content:"\ef07"}

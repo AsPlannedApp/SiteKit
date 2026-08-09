@@ -1,0 +1,121 @@
+/* modules/hero/styles.css (#issue-index hides at <=1024px),
+ * (CTA short-label swap at <=600px). .hero-avatar is new: not in the source,
+ * added to demonstrate an optional nested module asset. */
+
+.hero-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1rem, 4vw, 2rem);
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    align-items: flex-end;
+    text-align: left;
+}
+
+.hero-copy {
+    flex: 1 1 480px;
+    min-width: 0;
+}
+
+.hero-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 999px;
+    display: block;
+    margin-bottom: 1.25rem;
+    object-fit: cover;
+}
+
+.hero-eyebrow {
+    font-size: .78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    color: var(--fg-accent);
+    margin-bottom: 1rem;
+}
+
+.hero-copy h1 {
+    font-weight: 700;
+    font-size: clamp(3rem, 8.5vw, 5.5rem);
+    line-height: .88;
+    letter-spacing: -.045em;
+}
+
+.hero-copy h1 span {
+    color: var(--brand);
+}
+
+.hero-copy p {
+    max-width: 46ch;
+    font-size: clamp(1rem, 2vw, 1.1rem);
+    line-height: 1.65;
+    color: var(--fg-muted);
+    margin-top: 1.5rem;
+}
+
+.hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin-top: 2rem;
+}
+
+#issue-index {
+    flex: 0 1 300px;
+    min-width: 240px;
+    border-left: 2px solid var(--fg-body);
+    padding-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .85rem;
+}
+
+#issue-index__label {
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .16em;
+    color: var(--fg-muted);
+}
+
+#issue-index a {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: .92rem;
+    font-weight: 700;
+    color: var(--fg-body);
+    padding-bottom: .6rem;
+    border-bottom: 1px dotted rgba(26, 26, 26, .3);
+}
+
+#issue-index a:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+#issue-index a span:last-child {
+    color: var(--fg-accent);
+}
+
+[data-cta-short] {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    #issue-index {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    [data-cta-long] {
+        display: none;
+    }
+
+    [data-cta-short] {
+        display: inline;
+    }
+}

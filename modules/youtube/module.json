@@ -1,0 +1,13 @@
+{
+  "id": "youtube",
+  "kind": "content-section",
+  "navLabel": "YouTube",
+  "navIcon": "ti-microphone-2",
+  "anchor": "youtube",
+  "sources": [],
+  "requiresCoreAssets": ["tabler-icons"],
+  "contentSchema": "./content.schema.json",
+  "template": "./template.js",
+  "styles": "./styles.css",
+  "client": "./client.js"
+}

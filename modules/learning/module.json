@@ -1,0 +1,12 @@
+{
+  "id": "learning",
+  "kind": "content-section",
+  "navLabel": "Credentials",
+  "navIcon": "ti-certificate",
+  "anchor": "learning",
+  "sources": [],
+  "requiresCoreAssets": ["tabler-icons"],
+  "contentSchema": "./content.schema.json",
+  "template": "./template.js",
+  "styles": "./styles.css"
+}

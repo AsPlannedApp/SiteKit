@@ -1,0 +1,12 @@
+{
+  "eyebrow": "Software developer",
+  "name": "John",
+  "nameHighlight": "Smith",
+  "tagline": "Personal Homepage",
+  "issueIndexLabel": "Content",
+  "ctas": [
+    { "label": "Read my Blog", "shortLabel": "Blog", "href": "https://myblog.com", "icon": "ti-writing-sign", "variant": "opposite", "external": true },
+    { "label": "Email", "href": "mailto:email@example.com", "icon": "ti-mail", "variant": "ghost", "external": true },
+    { "label": "GitHub", "href": "https://github.com/", "icon": "ti-brand-github", "variant": "ghost", "external": true }
+  ]
+}

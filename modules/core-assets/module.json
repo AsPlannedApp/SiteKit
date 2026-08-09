@@ -1,0 +1,7 @@
+{
+  "id": "core-assets",
+  "kind": "infra",
+  "template": "./template.js",
+  "styles": "./styles/base.css",
+  "client": "./client.js"
+}

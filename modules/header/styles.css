@@ -1,0 +1,74 @@
+/* modules/header/styles.css */
+
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(10px);
+    background: color-mix(in srgb, var(--bg-page) 92%, transparent);
+    border-bottom: 2px solid var(--fg-body);
+}
+
+.site-header__inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: .9rem clamp(1rem, 4vw, 2rem);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.site-header__logo {
+    display: flex;
+    align-items: center;
+    color: var(--fg-body);
+}
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(.9rem, 2.5vw, 1.75rem);
+    overflow-x: auto;
+    font-size: .78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+}
+
+.site-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    color: var(--fg-body);
+    white-space: nowrap;
+}
+
+.site-nav [data-nav-icon] {
+    display: none;
+    font-size: 1.15rem;
+}
+
+.site-header__note {
+    font-size: .75rem;
+    color: var(--fg-muted);
+    font-style: italic;
+    white-space: nowrap;
+}
+
+@media (max-width: 450px) {
+    [data-nav-label] {
+        display: none;
+    }
+
+    .site-nav [data-nav-icon] {
+        display: inline-flex;
+    }
+
+    .site-nav {
+        flex: 1 1 auto;
+        justify-content: flex-end;
+        gap: 1.25rem;
+        overflow: visible;
+    }
+}

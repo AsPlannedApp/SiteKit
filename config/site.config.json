@@ -1,0 +1,20 @@
+{
+  "identity": {
+    "name": "John Smith",
+    "tagline": "Software Developer"
+  },
+  "seo": {
+    "title": "John Smith",
+    "description": "Software Developer"
+  },
+  "modules": {
+    "enabled": ["youtube", "learning"],
+    "order": ["youtube", "learning"],
+    "mode": {}
+  },
+  "theme": {
+    "preset": "default",
+    "overrides": {}
+  },
+  "links": {}
+}

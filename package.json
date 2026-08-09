@@ -1,0 +1,15 @@
+{
+  "name": "sitekit",
+  "version": "0.1.0",
+  "description": "A self-contained-module personal-site generator: plain HTML/CSS/vanilla JS output, Node/npm-driven build.",
+  "type": "module",
+  "private": true,
+  "license": "GPL-2.0",
+  "bin": {
+    "sitekit": "./bin/cli.js"
+  },
+  "scripts": {
+    "generate": "node bin/cli.js generate",
+    "check": "node bin/cli.js check"
+  }
+}
