@@ -148,3 +148,6 @@ assets/*
 # WIP modules
 modules/press
 modules/press/*
+
+# Ignore Claude Plan
+PLAN.md
