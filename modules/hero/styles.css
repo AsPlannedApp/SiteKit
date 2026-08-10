@@ -88,7 +88,7 @@
     font-weight: 700;
     color: var(--fg-body);
     padding-bottom: .6rem;
-    border-bottom: 1px dotted rgba(26, 26, 26, .3);
+    border-bottom: 1px dotted var(--border-strong);
 }
 
 #issue-index a:last-child {

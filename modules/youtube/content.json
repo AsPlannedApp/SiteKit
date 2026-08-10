@@ -2,7 +2,7 @@
   "eyebrow": "Feature",
   "heading": "YouTube Playlist",
   "note": "Video, demos, and technical presentations",
-  "talks": [
+  "youtube": [
     {
       "title": "Tetris — Official Trailer | Apple TV",
       "videoId": "-BLM1naCfME",

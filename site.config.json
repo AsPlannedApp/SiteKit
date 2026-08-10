@@ -1,0 +1,37 @@
+{
+  "identity": {
+    "name": "John Smith",
+    "tagline": "Software Developer"
+  },
+  "seo": {
+    "title": "John Smith",
+    "description": "Software Developer"
+  },
+  "modules": {
+    "enabled": [
+      "dark-mode",
+      "youtube",
+      "press",
+      "learning"
+    ],
+    "order": [
+      "dark-mode",
+      "youtube",
+      "press",
+      "learning"
+    ],
+    "mode": {},
+    "overrides": {
+      "learning": {
+        "colors": {
+          "trophyFill": "#66AAAA"
+        }
+      }
+    }
+  },
+  "theme": {
+    "preset": "asplanned",
+    "overrides": {}
+  },
+  "links": {}
+}

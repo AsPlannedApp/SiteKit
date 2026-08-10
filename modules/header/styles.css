@@ -56,6 +56,58 @@
     white-space: nowrap;
 }
 
+.site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--fg-body);
+    font-size: 1.05rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color .18s;
+}
+
+.theme-toggle:hover {
+    background: var(--surface-hover);
+}
+
+/* Only one of the two glyphs is ever visible at a time -- which one flips
+   with the same cascade dark-mode/template.js uses for its own alias
+   overrides (OS-preference media query, overridden by an explicit
+   data-theme attribute set via the manual toggle in dark-mode/client.js). */
+.theme-toggle [data-theme-icon="sun"] {
+    display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .theme-toggle [data-theme-icon="sun"] {
+        display: inline-flex;
+    }
+
+    :root:not([data-theme="light"]) .theme-toggle [data-theme-icon="moon"] {
+        display: none;
+    }
+}
+
+:root[data-theme="dark"] .theme-toggle [data-theme-icon="sun"] {
+    display: inline-flex;
+}
+
+:root[data-theme="dark"] .theme-toggle [data-theme-icon="moon"] {
+    display: none;
+}
+
 @media (max-width: 450px) {
     [data-nav-label] {
         display: none;

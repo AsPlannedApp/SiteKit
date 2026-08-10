@@ -8,7 +8,17 @@ export const GENERATED_MARKER_PREFIX = '<!-- generated-by:sitekit@';
  * them; every module of kind "content-section" is wrapped in <main>, in
  * the order it was rendered.
  */
-export function buildDocument({ config, version, themeCss, styleText, scriptText, rendered, headExtras = [] }) {
+export function buildDocument({
+    config,
+    version,
+    themeCss,
+    styleText,
+    scriptText,
+    globalsCss = '',
+    rendered,
+    headExtras = [],
+    fontTags = { headExtras: [], themeFontFaceCss: '' },
+}) {
     const seo = config.seo || {};
     const title = seo.title || config.identity?.name || 'My Site';
     const description = seo.description || '';
@@ -23,9 +33,27 @@ export function buildDocument({ config, version, themeCss, styleText, scriptText
         ? `<main>\n${contentSections.map((s) => s.html).join('\n')}\n</main>`
         : '';
 
+    // header/hero/footer are looked up by id and mainHtml only ever draws
+    // from content-section results, so "extension" kind modules (favicon,
+    // og-meta, dark-mode, ...) are never pulled into the visible body just
+    // by construction here -- their contract is html: '' anyway, but this
+    // keeps it true even if that convention is ever violated by mistake.
     const bodyParts = [header?.html, hero?.html, mainHtml, footer?.html].filter(Boolean);
 
-    const allHeadExtras = rendered.flatMap((r) => r.headExtras || []).concat(headExtras);
+    const allHeadExtras = rendered
+        .flatMap((r) => r.headExtras || [])
+        .concat(fontTags.headExtras || [])
+        .concat(headExtras);
+
+    // Extension modules' own global CSS (dark-mode's media-query overrides,
+    // a future favicon module's mask-icon color, ...) joins the same
+    // "globals" layer as Step 1's themable-slot overrides -- both are meant
+    // to win, by source order, over theme tokens and module styles.css.
+    const extensionGlobalCss = rendered
+        .filter((r) => r.kind === 'extension' && r.globalCss)
+        .map((r) => r.globalCss)
+        .join('\n\n');
+    const mergedGlobalsCss = [globalsCss, extensionGlobalCss].filter(Boolean).join('\n\n');
 
     return `<!DOCTYPE html>
 <html lang="${escapeHtml(seo.locale ? seo.locale.split('_')[0] : 'en')}">
@@ -40,9 +68,10 @@ ${GENERATED_MARKER_PREFIX}${version} -- do not hand-edit; edit config/ and modul
 ${allHeadExtras.join('\n')}
 
     <style>
-${themeCss}
+${fontTags.themeFontFaceCss ? `${fontTags.themeFontFaceCss}\n\n` : ''}${themeCss}
 
 ${styleText}
+${mergedGlobalsCss ? `\n${mergedGlobalsCss}\n` : ''}
     </style>
 </head>
 <body>

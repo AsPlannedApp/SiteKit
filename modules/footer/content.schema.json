@@ -17,6 +17,11 @@
           "href": { "type": "string" }
         }
       }
+    },
+    "extraHtml": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Raw HTML strings inserted as-is after badges -- for content that can't go through ctx.asset() (e.g. externally-hosted W3C validator badges, a copyright line, an email link). Author-controlled; NOT escaped. Checked for tag-balance by `npm run check` (see src/core/html-lint.js), but not otherwise sanitized."
     }
   }
 }

@@ -3,6 +3,41 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 /**
+ * Given every discovered module manifest and the site config, resolves the
+ * ordered list of module ids that will actually be loaded/rendered:
+ * infra/chrome/extension modules are present-on-disk-means-active (with
+ * extension opt-out via config.extensions.<id> = false), plus every id in
+ * config.modules.order. An id already auto-included is skipped if it's
+ * also (redundantly) listed in modules.order, to avoid silently
+ * double-loading/double-rendering it.
+ *
+ * Shared by generate.js (to actually build the page) and check.js (to know
+ * which modules' content.json to validate) so the two never drift apart on
+ * what "active" means.
+ */
+export function resolveActiveModuleIds(manifests, config) {
+    const extensionOptOuts = config.extensions || {};
+    const ids = [];
+
+    for (const [id, manifest] of manifests) {
+        if (manifest.kind === 'infra' || manifest.kind === 'chrome') {
+            ids.push(id);
+        } else if (manifest.kind === 'extension' && extensionOptOuts[id] !== false) {
+            ids.push(id);
+        }
+    }
+    for (const id of config.modules.order) {
+        if (!manifests.has(id)) {
+            throw new Error(`config.modules.order references unknown module "${id}" (no modules/${id}/module.json found).`);
+        }
+        if (ids.includes(id)) continue;
+        ids.push(id);
+    }
+
+    return ids;
+}
+
+/**
  * Discovers every module under modulesRoot (modules/<id>/module.json) and
  * returns a Map<id, manifest & {dir}>. Does not load template.js/styles/
  * content yet -- see loadModule() for that.

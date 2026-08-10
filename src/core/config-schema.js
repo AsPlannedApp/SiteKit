@@ -26,8 +26,26 @@ export function validateConfig(config) {
     if (!config.theme || typeof config.theme.preset !== 'string') {
         errors.push('config.theme.preset must name a theme under themes/<preset>/tokens.json.');
     }
+    if (config.extensions !== undefined) {
+        if (typeof config.extensions !== 'object' || Array.isArray(config.extensions)) {
+            errors.push('config.extensions must be an object keyed by extension module id, with boolean values.');
+        } else if (Object.values(config.extensions).some((v) => typeof v !== 'boolean')) {
+            errors.push('config.extensions values must be boolean (false to opt an extension out; present-on-disk defaults to true).');
+        }
+    }
+    if (config.modules && config.modules.overrides !== undefined) {
+        if (typeof config.modules.overrides !== 'object' || Array.isArray(config.modules.overrides)) {
+            errors.push('config.modules.overrides must be an object keyed by module id.');
+        } else {
+            for (const [id, entry] of Object.entries(config.modules.overrides)) {
+                if (entry && entry.colors !== undefined && (typeof entry.colors !== 'object' || Array.isArray(entry.colors))) {
+                    errors.push(`config.modules.overrides.${id}.colors must be an object keyed by slot name.`);
+                }
+            }
+        }
+    }
 
     if (errors.length) {
-        throw new Error(`Invalid config/site.config.json:\n  - ${errors.join('\n  - ')}`);
+        throw new Error(`Invalid site.config.json:\n  - ${errors.join('\n  - ')}`);
     }
 }

@@ -4,6 +4,7 @@
   "navLabel": "Credentials",
   "navIcon": "ti-certificate",
   "anchor": "learning",
+  "themable": ["trophyFill"],
   "sources": [],
   "requiresCoreAssets": ["tabler-icons"],
   "contentSchema": "./content.schema.json",

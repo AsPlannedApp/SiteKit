@@ -1,0 +1,5 @@
+{
+  "id": "og-meta",
+  "kind": "extension",
+  "template": "./template.js"
+}

@@ -1,7 +1,7 @@
 import { escapeHtml, resolveHref } from '../../src/core/html-util.js';
 
 /**
- * modules/talks/template.js — the talks[] data + click-to-embed rendering, which
+ * modules/talks/template.js — the youtube[] data + click-to-embed rendering, which
  * stays entirely client-side, matching the source). This module has no
  * fetchable "sources" -- content.json IS the data, so there's no baked/live
  * split, only the SSR'd shell + an embedded JSON payload for client.js.
@@ -13,22 +13,22 @@ import { escapeHtml, resolveHref } from '../../src/core/html-util.js';
  */
 
 export function summary(content) {
-    const talks = content.talks || [];
-    return { label: 'Talks & demos', count: talks.length };
+    const playlist = content.youtube || [];
+    return { label: 'Videos & demos', count: playlist.length };
 }
 
 export function render(content, config, mode, ctx) {
-    const talks = (content.talks || []).map((talk) => ({
-        title: talk.title,
-        videoId: talk.videoId || null,
-        href: talk.href ? resolveHref(talk.href, ctx) : null,
-        img: talk.img ? ctx.asset(talk.img) : null,
-        thumb: talk.thumb ? ctx.asset(talk.thumb) : null,
-        actions: (talk.actions || []).map((a) => ({ label: a.label, href: resolveHref(a.href, ctx) })),
+    const playlist = (content.youtube || []).map((video) => ({
+        title: video.title,
+        videoId: video.videoId || null,
+        href: video.href ? resolveHref(video.href, ctx) : null,
+        img: video.img ? ctx.asset(video.img) : null,
+        thumb: video.thumb ? ctx.asset(video.thumb) : null,
+        actions: (video.actions || []).map((a) => ({ label: a.label, href: resolveHref(a.href, ctx) })),
     }));
 
     const html = `
-    <section id="talks" class="section" aria-label="Talks and Demos">
+    <section id="youtube" class="section" aria-label="Videos and Demos">
         <div class="wrap">
             <div class="section-head">
                 <div><span class="eyebrow">${escapeHtml(content.eyebrow || '')}</span><h2>${escapeHtml(content.heading || '')}</h2></div>
@@ -46,7 +46,7 @@ export function render(content, config, mode, ctx) {
                     <div id="talks-rail-inner" class="talks-rail__inner"></div>
                 </div>
             </div>
-            <script type="application/json" id="talks-data">${JSON.stringify(talks)}</script>
+            <script type="application/json" id="talks-data">${JSON.stringify(playlist)}</script>
         </div>
     </section>`;
 

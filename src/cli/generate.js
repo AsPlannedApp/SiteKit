@@ -1,18 +1,20 @@
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 
 import { validateConfig } from '../core/config-schema.js';
-import { discoverModules, loadModule } from '../core/module-loader.js';
+import { discoverModules, loadModule, resolveActiveModuleIds } from '../core/module-loader.js';
 import { loadThemeTokens, buildThemeCss } from '../core/theme-tokens.js';
+import { buildFontTags } from '../core/font-tags.js';
 import { renderAll } from '../core/render-pipeline.js';
 import { buildDocument, GENERATED_MARKER_PREFIX } from '../core/html-shell.js';
-import { copyModuleAssets } from '../core/asset-pipeline.js';
+import { copyModuleAssets, copyThemeFonts } from '../core/asset-pipeline.js';
+import { buildIconSubset } from '../core/icon-subset.js';
 
 const ROOT = process.cwd();
 const VERSION = JSON.parse(readFileSync(path.join(ROOT, 'package.json'), 'utf8')).version;
 
 export async function run({ force = false } = {}) {
-    const configPath = path.join(ROOT, 'config', 'site.config.json');
+    const configPath = path.join(ROOT, 'site.config.json');
     const config = JSON.parse(readFileSync(configPath, 'utf8'));
     validateConfig(config);
 
@@ -21,19 +23,12 @@ export async function run({ force = false } = {}) {
 
     // "infra"/"chrome" modules (core-assets, header, hero, footer) are always
     // included when present -- they aren't part of the user-selectable
-    // content-section set in config.modules.enabled.
-    const idsToLoad = [];
-    for (const [id, manifest] of manifests) {
-        if (manifest.kind === 'infra' || manifest.kind === 'chrome') {
-            idsToLoad.push(id);
-        }
-    }
-    for (const id of config.modules.order) {
-        if (!manifests.has(id)) {
-            throw new Error(`config.modules.order references unknown module "${id}" (no modules/${id}/module.json found).`);
-        }
-        idsToLoad.push(id);
-    }
+    // content-section set in config.modules.enabled. "extension" modules
+    // (favicon/app-icon, og-meta, dark-mode, ...) follow the same
+    // present-on-disk-means-active rule, but can be individually opted out
+    // via config.extensions.<id> = false (e.g. once favicon generation is
+    // heavy enough to want explicit control).
+    const idsToLoad = resolveActiveModuleIds(manifests, config);
 
     const loaded = [];
     for (const id of idsToLoad) {
@@ -41,9 +36,25 @@ export async function run({ force = false } = {}) {
     }
 
     const tokens = loadThemeTokens(path.join(ROOT, 'themes'), config.theme.preset);
-    const themeCss = buildThemeCss(tokens, config.theme.overrides || {});
+    const themeOverrides = config.theme.overrides || {};
+    const themeCss = buildThemeCss(tokens.colors, themeOverrides);
+    const mergedThemeColors = { ...tokens.colors, ...themeOverrides };
 
-    const { rendered, styleText, scriptText } = renderAll(loaded, config);
+    // Font provider/baseUrl can be overridden per-site without forking the
+    // theme (config.theme.fontOverrides); families/files always stay
+    // theme-owned, since swapping a CDN doesn't change which font files
+    // exist, only where they're fetched from.
+    const fontOverrides = config.theme.fontOverrides || {};
+    const mergedFonts = { ...(tokens.fonts || {}), ...fontOverrides };
+    if (mergedFonts.provider === 'self-hosted' && !fontOverrides.baseUrl) {
+        const copiedBaseUrl = copyThemeFonts(path.join(ROOT, 'themes'), config.theme.preset, ROOT);
+        if (copiedBaseUrl) mergedFonts.baseUrl = copiedBaseUrl;
+    }
+    const fontTags = buildFontTags(mergedFonts);
+
+    const { rendered, styleText, scriptText, globalsCss } = renderAll(loaded, config, {
+        themeColors: mergedThemeColors,
+    });
 
     const html = buildDocument({
         config,
@@ -51,7 +62,9 @@ export async function run({ force = false } = {}) {
         themeCss,
         styleText,
         scriptText,
+        globalsCss,
         rendered,
+        fontTags,
     });
 
     const outputPath = path.join(ROOT, 'index.html');
@@ -67,7 +80,26 @@ export async function run({ force = false } = {}) {
 
     const copiedAssetModules = copyModuleAssets(loaded, ROOT);
 
+    // Tabler icon subsetting runs AFTER copyModuleAssets (which already
+    // skipped the vendored full font/map via core-assets' assetsExclude --
+    // see asset-pipeline.js) and writes the real subset straight into that
+    // same output folder, since it's build output, not authored source.
+    const coreAssetsModule = loaded.find((m) => m.id === 'core-assets');
+    let iconSubsetInfo = '(none)';
+    if (coreAssetsModule) {
+        const subset = buildIconSubset({ rendered, loadedModules: loaded, coreAssetsDir: coreAssetsModule.dir });
+        if (subset) {
+            const { cssText, woff2Buffer } = await subset.build();
+            const fontsOutDir = path.join(ROOT, 'assets', 'core-assets', 'fonts');
+            mkdirSync(fontsOutDir, { recursive: true });
+            writeFileSync(path.join(fontsOutDir, 'tabler-icons-subset.min.css'), cssText);
+            writeFileSync(path.join(fontsOutDir, 'tabler-icons-subset.woff2'), woff2Buffer);
+            iconSubsetInfo = `${subset.usedClasses.length} glyphs, ${woff2Buffer.length} bytes`;
+        }
+    }
+
     console.log(`Generated ${outputPath}`);
     console.log(`Modules rendered: ${rendered.map((r) => r.id).join(', ') || '(none)'}`);
     console.log(`Assets copied for: ${copiedAssetModules.join(', ') || '(none)'}`);
+    console.log(`Tabler icon subset: ${iconSubsetInfo}`);
 }

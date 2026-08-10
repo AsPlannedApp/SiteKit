@@ -1,11 +1,8 @@
 {
   "name": "John Smith",
   "role": "Software Developer",
-  "badges": [
-    {
-      "image": "badges/verified.svg",
-      "alt": "Validated site",
-      "href": "#"
-    }
+  "badges": [],
+  "extraHtml": [
+    "<a class=\"site-footer__badge\" href=\"mailto:hello@example.com\">hello@example.com</a>"
   ]
 }

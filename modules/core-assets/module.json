@@ -3,5 +3,6 @@
   "kind": "infra",
   "template": "./template.js",
   "styles": "./styles/base.css",
-  "client": "./client.js"
+  "client": "./client.js",
+  "assetsExclude": ["fonts/tabler-icons-full.woff2", "fonts/tabler-icons-map.json"]
 }

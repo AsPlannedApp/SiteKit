@@ -126,7 +126,7 @@ a.talks-player__cover:hover {
     position: absolute;
     inset: 0;
     background: var(--bg-page);
-    border: 1px solid rgba(26, 26, 26, .15);
+    border: 1px solid var(--border-hairline);
     border-radius: 6px;
     padding: .6rem;
     overflow-y: auto;

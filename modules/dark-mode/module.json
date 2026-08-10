@@ -1,0 +1,6 @@
+{
+  "id": "dark-mode",
+  "kind": "extension",
+  "template": "./template.js",
+  "client": "./client.js"
+}

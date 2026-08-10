@@ -1,3 +1,5 @@
+import { resolveThemeColorValue } from './theme-tokens.js';
+
 /**
  * Two-pass render:
  *
@@ -38,7 +40,48 @@ export function collectSections(loadedModules, config) {
     return sections;
 }
 
-export function renderAll(loadedModules, config, { alwaysIncludeClient = () => true } = {}) {
+/**
+ * Resolves every module's `modules.overrides.<id>.colors.<slot>` entry
+ * (declared as themable in its module.json) against the merged theme colors
+ * map, emitting one scoped CSS rule per module, e.g.:
+ *   #learning { --slot-trophyFill: var(--brand-fill); }
+ * Module CSS reads `var(--slot-<slot>, var(--<its-own-default-alias>))`, so
+ * an unconfigured slot silently falls through to the module's own default --
+ * this function only emits a rule when an override is actually configured.
+ * Extension modules' own `globalCss` (Step 4) is appended into the same
+ * returned string by the caller (generate.js/html-shell.js), since both are
+ * meant to win, by source order, over theme tokens and module styles.css.
+ */
+function buildThemableOverridesCss(loadedModules, config, themeColors) {
+    const overrides = config.modules?.overrides || {};
+    const chunks = [];
+
+    for (const mod of loadedModules) {
+        const slots = mod.manifest.themable;
+        const modOverrides = overrides[mod.id]?.colors;
+        if (!slots || !slots.length || !modOverrides) continue;
+
+        const declarations = [];
+        for (const slot of slots) {
+            const value = modOverrides[slot];
+            if (value === undefined) continue;
+            let resolved;
+            try {
+                resolved = resolveThemeColorValue(value, themeColors);
+            } catch (err) {
+                throw new Error(`modules.overrides.${mod.id}.colors.${slot}: ${err.message}`);
+            }
+            declarations.push(`    --slot-${slot}: ${resolved};`);
+        }
+        if (declarations.length) {
+            chunks.push(`#${mod.id} {\n${declarations.join('\n')}\n}`);
+        }
+    }
+
+    return chunks.join('\n\n');
+}
+
+export function renderAll(loadedModules, config, { alwaysIncludeClient = () => true, themeColors = {} } = {}) {
     const sections = collectSections(loadedModules, config);
 
     const rendered = [];
@@ -62,10 +105,13 @@ export function renderAll(loadedModules, config, { alwaysIncludeClient = () => t
         }
     }
 
+    const globalsCss = buildThemableOverridesCss(loadedModules, config, themeColors);
+
     return {
         sections,
         rendered,
         styleText: styleChunks.join('\n\n'),
         scriptText: scriptChunks.join('\n\n'),
+        globalsCss,
     };
 }

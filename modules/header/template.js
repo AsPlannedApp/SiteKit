@@ -27,6 +27,22 @@ export function render(content, config, mode, ctx) {
         ? `<span class="site-header__note" data-note>${escapeHtml(content.note)}</span>`
         : '';
 
+    // The dark-mode extension is present-on-disk-active-by-default (see
+    // module-loader.js's resolveActiveModuleIds()) -- header has no direct
+    // view of which modules loaded, but it can read the same opt-out flag
+    // any generate.js/check.js consumer would, so the button doesn't render
+    // inert if a site explicitly disables the extension. Its click handling
+    // is wired up generically by dark-mode/client.js's [data-theme-toggle]
+    // scan -- no coupling beyond that one shared attribute.
+    const darkModeEnabled = config.extensions?.['dark-mode'] !== false;
+    const themeToggle = darkModeEnabled
+        ? `
+            <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle dark mode">
+                <i class="ti ti-sun" data-theme-icon="sun" aria-hidden="true"></i>
+                <i class="ti ti-moon" data-theme-icon="moon" aria-hidden="true"></i>
+            </button>`
+        : '';
+
     const html = `
 <header class="site-header">
     <div class="site-header__inner">
@@ -40,7 +56,9 @@ export function render(content, config, mode, ctx) {
         <nav class="site-nav" aria-label="Section links">
             ${navLinks}
         </nav>
-        ${note}
+        <div class="site-header__actions">
+            ${note}${themeToggle}
+        </div>
     </div>
 </header>`;
 

@@ -8,10 +8,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Software Developer">
     
-<link rel="preload" href="assets/core-assets/fonts/tabler-icons-subset.min.css" as="style" onload="this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="assets/core-assets/fonts/tabler-icons-subset.min.css"></noscript>
+<link rel="stylesheet" href="assets/core-assets/fonts/tabler-icons-subset.min.css">
+    <meta name="color-scheme" content="light dark">
+    <script>(function(){try{var t=localStorage.getItem('sitekit-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="John Smith">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="John Smith">
+    <meta property="og:description" content="Software Developer">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="John Smith">
+    <meta name="twitter:description" content="Software Developer">
+    <link rel="preload" href="assets/theme-fonts/lato-regular.woff2" as="font" type="font/woff2" crossorigin>
 
     <style>
+@font-face {
+    font-family: 'Lato';
+    src: url('assets/theme-fonts/lato-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('assets/theme-fonts/lato-bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('assets/theme-fonts/lato-italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
 :root {
     --ap-color-neutral-0: #FFFFFF;
     --ap-color-neutral-50: #F5F5F5;
@@ -22,35 +56,43 @@
     --ap-color-neutral-500: #353535;
     --ap-color-neutral-700: #282828;
     --ap-color-neutral-900: #1A1A1A;
-    --ap-color-accent-900: #0B3D91;
-    --ap-color-accent-700: #1F5FD1;
-    --ap-color-accent-500: #4C7FE0;
-    --ap-color-accent2-900: #7A2310;
-    --ap-color-accent2-700: #B3421F;
-    --ap-color-accent2-500: #D9713F;
+    --ap-color-teal-900: #003840;
+    --ap-color-teal-700: #005F6A;
+    --ap-color-teal-500: #2BA193;
+    --ap-color-teal-300: #5BBFB3;
+    --ap-color-teal-100: #D1EFEC;
+    --ap-color-teal-50: #EBF8F6;
+    --ap-color-orange-900: #7A2310;
+    --ap-color-orange-700: #E45C3A;
+    --ap-color-orange-500: #F4A261;
+    --ap-color-orange-300: #F7C69A;
+    --ap-color-orange-100: #FDEBD8;
+    --ap-color-gold-500: #EAC871;
+    --ap-color-gold-200: #F5E5B5;
+    --ap-color-gold-50: #F7EAC9;
     --ap-bg-page: var(--ap-color-neutral-0);
     --ap-bg-secondary: var(--ap-color-neutral-100);
     --ap-surface-muted: var(--ap-color-neutral-100);
     --ap-surface-hover: var(--ap-color-neutral-100);
     --ap-surface-active: color-mix(in srgb, var(--ap-brand) 14%, var(--ap-bg-page));
-    --ap-brand: var(--ap-color-accent-700);
-    --ap-brand-light: var(--ap-color-accent-500);
-    --ap-brand-opposite: var(--ap-color-accent2-700);
-    --ap-brand-opposite-light: var(--ap-color-accent2-500);
-    --ap-brand-fill: var(--ap-color-neutral-300);
+    --ap-brand: var(--ap-color-teal-700);
+    --ap-brand-light: var(--ap-color-teal-500);
+    --ap-brand-opposite: var(--ap-color-orange-700);
+    --ap-brand-opposite-light: var(--ap-color-orange-500);
+    --ap-brand-fill: var(--ap-color-gold-500);
     --ap-fg-heading: var(--ap-color-neutral-500);
     --ap-fg-body: var(--ap-color-neutral-900);
     --ap-fg-muted: var(--ap-color-neutral-400);
     --ap-fg-note: var(--ap-color-neutral-400);
-    --ap-fg-accent: var(--ap-color-accent2-900);
+    --ap-fg-accent: var(--ap-color-orange-900);
     --ap-fg-inverted: var(--ap-color-neutral-0);
     --ap-radius-sm: 0.5rem;
     --ap-radius-md: 0.75rem;
     --ap-radius-lg: 1rem;
     --ap-radius-pill: 5rem;
     --ap-btn-radius: 10px;
-    --ap-font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    --ap-font-heading: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --ap-font-body: 'Lato', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --ap-font-heading: 'Lato', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     --ap-font-mono: ui-monospace, 'Courier New', monospace;
     --ap-type-xs: 0.70rem;
     --ap-type-sm: 0.8125rem;
@@ -81,6 +123,13 @@
     --surface-muted: var(--ap-surface-muted);
     --surface-hover: var(--ap-surface-hover);
     --surface-active: var(--ap-surface-active);
+    --border-hairline: rgba(26, 26, 26, .15);
+    --border-strong: rgba(26, 26, 26, .25);
+    --shadow-ambient: rgba(26, 26, 26, .16);
+    --fg-on-fill: rgba(26, 26, 26, .75);
+    --surface-hover-ghost: rgba(26, 26, 26, .06);
+    --scrollbar-track: rgba(26, 26, 26, .06);
+    --scrollbar-thumb: rgba(26, 26, 26, .25);
 }
 
 /* ---- core-assets ---- */
@@ -163,13 +212,13 @@ p {
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(26, 26, 26, 0.06);
+    background: var(--scrollbar-track);
     border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb {
     border-radius: 999px;
-    background-color: rgba(26, 26, 26, 0.25);
+    background-color: var(--scrollbar-thumb);
 }
 
 .wrap {
@@ -294,11 +343,11 @@ main .section {
 .btn-ghost {
     background: transparent;
     color: var(--fg-body);
-    border-color: rgba(26, 26, 26, .25);
+    border-color: var(--border-strong);
 }
 
 .btn-ghost:hover {
-    background: rgba(26, 26, 26, .06);
+    background: var(--surface-hover-ghost);
 }
 
 /* Cross-module attribute: any element marked data-note (header's issue note,
@@ -422,6 +471,58 @@ main .section {
     white-space: nowrap;
 }
 
+.site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--fg-body);
+    font-size: 1.05rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color .18s;
+}
+
+.theme-toggle:hover {
+    background: var(--surface-hover);
+}
+
+/* Only one of the two glyphs is ever visible at a time -- which one flips
+   with the same cascade dark-mode/template.js uses for its own alias
+   overrides (OS-preference media query, overridden by an explicit
+   data-theme attribute set via the manual toggle in dark-mode/client.js). */
+.theme-toggle [data-theme-icon="sun"] {
+    display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .theme-toggle [data-theme-icon="sun"] {
+        display: inline-flex;
+    }
+
+    :root:not([data-theme="light"]) .theme-toggle [data-theme-icon="moon"] {
+        display: none;
+    }
+}
+
+:root[data-theme="dark"] .theme-toggle [data-theme-icon="sun"] {
+    display: inline-flex;
+}
+
+:root[data-theme="dark"] .theme-toggle [data-theme-icon="moon"] {
+    display: none;
+}
+
 @media (max-width: 450px) {
     [data-nav-label] {
         display: none;
@@ -531,7 +632,7 @@ main .section {
     font-weight: 700;
     color: var(--fg-body);
     padding-bottom: .6rem;
-    border-bottom: 1px dotted rgba(26, 26, 26, .3);
+    border-bottom: 1px dotted var(--border-strong);
 }
 
 #issue-index a:last-child {
@@ -693,7 +794,7 @@ a.talks-player__cover:hover {
     position: absolute;
     inset: 0;
     background: var(--bg-page);
-    border: 1px solid rgba(26, 26, 26, .15);
+    border: 1px solid var(--border-hairline);
     border-radius: 6px;
     padding: .6rem;
     overflow-y: auto;
@@ -806,15 +907,273 @@ a.talks-player__cover:hover {
 }
 
 
+/* ---- press ---- */
+/* modules/press/styles.css — (#tutorials 2-column at <=1024px),
+ * (#tutorials 1-column at <=600px). */
+
+.print-panel {
+    background: var(--brand-opposite);
+    border-radius: 10px;
+    padding: clamp(1rem, 3vw, 1.6rem);
+    box-shadow: 0 16px 44px rgba(26, 26, 26, .2);
+}
+
+.print-panel__nameplate {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+    border-bottom: 3px double rgba(255, 255, 255, .5);
+    padding-bottom: .55rem;
+    margin-bottom: 1.1rem;
+    text-align: left;
+}
+
+.print-panel__nameplate span:first-child {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #fff;
+    letter-spacing: .01em;
+}
+
+.magazine-shelf {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    align-items: flex-start;
+    padding: .5rem .1rem 1rem;
+}
+
+.magazine-cover {
+    flex: 0 0 150px;
+    text-align: center;
+}
+
+.magazine-cover:nth-child(6n+1) { --tilt: -2.2deg; }
+.magazine-cover:nth-child(6n+2) { --tilt: 1.6deg; }
+.magazine-cover:nth-child(6n+3) { --tilt: -1.2deg; }
+.magazine-cover:nth-child(6n+4) { --tilt: 2.2deg; }
+.magazine-cover:nth-child(6n+5) { --tilt: -1.7deg; }
+.magazine-cover:nth-child(6n) { --tilt: 1.1deg; }
+
+.magazine-cover .cover-link {
+    display: block;
+    transform: rotate(var(--tilt, 0deg));
+    transform-origin: 50% 100%;
+    transition: transform .3s cubic-bezier(.785, .135, .15, .86), box-shadow .3s;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 12px 26px rgba(26, 26, 26, .16);
+}
+
+.magazine-cover .cover-link:hover,
+.magazine-cover .cover-link:focus-visible {
+    transform: rotate(0deg) translateY(-10px);
+    box-shadow: 0 22px 40px rgba(26, 26, 26, .24);
+    opacity: 1;
+}
+
+/* CD-Rom covers aren't magazine pages -- a paper drop shadow doesn't fit a
+   disc icon. */
+.magazine-cover--disc .cover-link,
+.magazine-cover--disc .cover-link:hover,
+.magazine-cover--disc .cover-link:focus-visible {
+    box-shadow: none;
+}
+
+.magazine-cover .cover-link img {
+    width: 100%;
+    aspect-ratio: 200 / 285;
+    object-fit: cover;
+    display: block;
+}
+
+.magazine-cover h3 {
+    font-weight: 700;
+    font-size: .8rem;
+    line-height: 1.3;
+    color: #fff;
+    margin: 1rem 0 .8rem;
+}
+
+.magazine-cover h3 span {
+    color: #fff;
+    font-weight: 400;
+}
+
+.magazine-cover .card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .5rem;
+    margin-top: 1.2rem;
+}
+
+.magazine-cover .text-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: var(--type-xs);
+    font-weight: 700;
+    color: #fff;
+    background: rgba(255, 255, 255, .14);
+    text-decoration: none;
+    transition: background-color .18s, opacity .18s;
+}
+
+.magazine-cover .text-link:hover {
+    background: rgba(255, 255, 255, .24);
+    opacity: 1;
+}
+
+/* ---------- download dropdown (multi-language / multi-part PDFs) ---------- */
+.dl-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dl-dropdown .dl-summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: var(--type-xs);
+    font-weight: 700;
+    color: #fff;
+    background: rgba(255, 255, 255, .14);
+    cursor: pointer;
+    list-style: none;
+    transition: background-color .18s;
+}
+
+.dl-dropdown .dl-summary::-webkit-details-marker {
+    display: none;
+}
+
+.dl-dropdown:hover .dl-summary,
+.dl-dropdown[open] .dl-summary {
+    background: rgba(255, 255, 255, .24);
+}
+
+.dl-dropdown .dl-summary i {
+    font-size: 13px;
+    transition: transform .18s;
+}
+
+.dl-dropdown[open] .dl-summary i {
+    transform: rotate(180deg);
+}
+
+.dl-dropdown .dl-menu {
+    /* Opens upward, not downward: .magazine-shelf sets overflow-x: auto,
+       which per spec forces its overflow-y to auto too, clipping anything
+       that overflows below the shelf. Upward stays inside that box. */
+    position: absolute;
+    z-index: 5;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 148px;
+    padding: 6px;
+    border-radius: 8px;
+    background: var(--fg-body);
+    box-shadow: 0 12px 28px rgba(26, 26, 26, .3);
+}
+
+.dl-dropdown .dl-menu a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 5px;
+    font-size: var(--type-xs);
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.dl-dropdown .dl-menu a:hover,
+.dl-dropdown .dl-menu a:focus-visible {
+    background: rgba(255, 255, 255, .12);
+    opacity: 1;
+}
+
+/* ---------- tutorials ---------- */
+#tutorials {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: 2rem;
+}
+
+.tutorial-card {
+    background: var(--bg-page);
+    border: 1px solid var(--border-hairline);
+    border-radius: 6px;
+    padding: 1.15rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-align: left;
+    transition: transform .25s, box-shadow .25s;
+}
+
+.tutorial-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(26, 26, 26, .12);
+    opacity: 1;
+}
+
+.tutorial-card img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.tutorial-card h4 {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--fg-body);
+    margin: 0 0 .3rem;
+}
+
+.tutorial-card span {
+    font-size: var(--type-s);
+    font-weight: 700;
+    color: var(--fg-note);
+}
+
+@media (max-width: 1024px) {
+    #tutorials {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    #tutorials {
+        grid-template-columns: 1fr;
+    }
+}
+
+
 /* ---- learning ---- */
 /* modules/learning/styles.css ([data-issuer] hides + medallion shrink at <=820px),
  * (credential-badge 3-per-row at <=680px),  (medallion shrink at <=600px). */
 
 .trophy-panel {
-    background: var(--brand-fill);
+    background: var(--slot-trophyFill, var(--brand-fill));
     border-radius: 10px;
     padding: clamp(1rem, 3vw, 1.6rem);
-    box-shadow: 0 16px 44px rgba(26, 26, 26, .16);
+    box-shadow: 0 16px 44px var(--shadow-ambient);
 }
 
 .trophy-panel__head {
@@ -823,6 +1182,11 @@ a.talks-player__cover:hover {
     align-items: baseline;
     gap: 1rem;
     flex-wrap: wrap;
+    /* Fixed, not var(--border-emphasis): this divider sits directly on the
+       trophy panel's own gold/grey fill (--slot-trophyFill/--brand-fill),
+       which doesn't flip in dark mode -- see --fg-on-fill's own comment for
+       the same reasoning applied to text in this panel. A dark-mode-flipped
+       (near-white) alias here would show up as a stray white line. */
     border-bottom: 3px double rgba(26, 26, 26, .4);
     padding-bottom: .55rem;
     margin-bottom: 1.4rem;
@@ -833,7 +1197,7 @@ a.talks-player__cover:hover {
     font-family: var(--font-heading);
     font-weight: 700;
     font-size: 1.05rem;
-    color: var(--fg-body);
+    color: var(--fg-on-fill);
     letter-spacing: .01em;
 }
 
@@ -841,7 +1205,7 @@ a.talks-player__cover:hover {
     font-size: .68rem;
     text-transform: uppercase;
     letter-spacing: .2em;
-    color: rgba(26, 26, 26, .75);
+    color: var(--fg-on-fill);
 }
 
 #trophies {
@@ -856,7 +1220,7 @@ a.talks-player__cover:hover {
     border-radius: 10px;
     padding: 1px 20px 20px 20px;
     margin: 20px 0 0 0;
-    border: 1px solid rgba(26, 26, 26, .15);
+    border: 1px solid var(--border-hairline);
 }
 
 .credential-badge {
@@ -877,11 +1241,14 @@ a.talks-player__cover:hover {
     height: 96px;
     border-radius: 50%;
     background: var(--bg-page);
+    /* Fixed, not var(--border-firm) -- see .trophy-panel__head's comment
+       above: this outline ring sits on the trophy panel's own gold/grey
+       fill, not the page background, so it shouldn't flip with it. */
     border: 3px solid rgba(26, 26, 26, .85);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: inset 0 0 0 5px var(--brand-fill);
+    box-shadow: inset 0 0 0 5px var(--slot-trophyFill, var(--brand-fill));
     transition: transform .25s;
 }
 
@@ -900,14 +1267,14 @@ a.talks-player__cover:hover {
     font-weight: 700;
     font-size: .9rem;
     line-height: 1.25;
-    color: var(--fg-body);
+    color: var(--fg-on-fill);
 }
 
 .credential-badge__issuer {
     font-size: .68rem;
     text-transform: uppercase;
     letter-spacing: .12em;
-    color: rgba(26, 26, 26, .8);
+    color: var(--fg-on-fill);
 }
 
 #mini-badges-label {
@@ -931,7 +1298,7 @@ a.talks-player__cover:hover {
     align-items: center;
     gap: .7rem;
     padding: .65rem 0;
-    border-bottom: 1px solid rgba(26, 26, 26, .14);
+    border-bottom: 1px solid var(--border-hairline);
     background: transparent;
     cursor: default;
     text-align: left;
@@ -999,7 +1366,7 @@ a.talks-player__cover:hover {
     .credential-badge__medallion {
         width: 76px;
         height: 76px;
-        box-shadow: inset 0 0 0 4px var(--brand-fill);
+        box-shadow: inset 0 0 0 4px var(--slot-trophyFill, var(--brand-fill));
     }
 
     .credential-badge__medallion img {
@@ -1010,6 +1377,47 @@ a.talks-player__cover:hover {
     .credential-badge h3 {
         font-size: .76rem;
     }
+}
+
+
+#learning {
+    --slot-trophyFill: #66AAAA;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+    --bg-page: #343434;
+    --surface-muted: rgba(255, 255, 255, .06);
+    --surface-hover: rgba(255, 255, 255, .08);
+    --surface-active: color-mix(in srgb, var(--brand) 20%, var(--bg-page));
+    --fg-body: #EDEDED;
+    --fg-muted: #A3A3A3;
+    --fg-note: #A3A3A3;
+    --fg-accent: var(--brand-light);
+    --border-hairline: rgba(255, 255, 255, .15);
+    --border-strong: rgba(255, 255, 255, .25);
+    --shadow-ambient: rgba(0, 0, 0, .5);
+    --surface-hover-ghost: rgba(255, 255, 255, .08);
+    --scrollbar-track: rgba(255, 255, 255, .08);
+    --scrollbar-thumb: rgba(255, 255, 255, .3);
+    }
+}
+
+:root[data-theme="dark"] {
+    --bg-page: #343434;
+    --surface-muted: rgba(255, 255, 255, .06);
+    --surface-hover: rgba(255, 255, 255, .08);
+    --surface-active: color-mix(in srgb, var(--brand) 20%, var(--bg-page));
+    --fg-body: #EDEDED;
+    --fg-muted: #A3A3A3;
+    --fg-note: #A3A3A3;
+    --fg-accent: var(--brand-light);
+    --border-hairline: rgba(255, 255, 255, .15);
+    --border-strong: rgba(255, 255, 255, .25);
+    --shadow-ambient: rgba(0, 0, 0, .5);
+    --surface-hover-ghost: rgba(255, 255, 255, .08);
+    --scrollbar-track: rgba(255, 255, 255, .08);
+    --scrollbar-thumb: rgba(255, 255, 255, .3);
 }
 
     </style>
@@ -1027,9 +1435,16 @@ a.talks-player__cover:hover {
         </a>
         <nav class="site-nav" aria-label="Section links">
             <a href="#youtube" title="YouTube"><i class="ti ti-microphone-2" data-nav-icon aria-hidden="true"></i><span data-nav-label>YouTube</span></a>
+            <a href="#press" title="Press"><i class="ti ti-news" data-nav-icon aria-hidden="true"></i><span data-nav-label>Press</span></a>
             <a href="#learning" title="Credentials"><i class="ti ti-certificate" data-nav-icon aria-hidden="true"></i><span data-nav-label>Credentials</span></a>
         </nav>
-        <span class="site-header__note" data-note>Year 2026</span>
+        <div class="site-header__actions">
+            
+            <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle dark mode">
+                <i class="ti ti-sun" data-theme-icon="sun" aria-hidden="true"></i>
+                <i class="ti ti-moon" data-theme-icon="moon" aria-hidden="true"></i>
+            </button>
+        </div>
     </div>
 </header>
 
@@ -1049,7 +1464,8 @@ a.talks-player__cover:hover {
         </div>
         <div id="issue-index">
             <div id="issue-index__label">Content</div>
-            <a href="#youtube"><span>Talks &amp; demos</span><span>5</span></a>
+            <a href="#youtube"><span>Videos &amp; demos</span><span>5</span></a>
+            <a href="#press"><span>Articles in print</span><span>6</span></a>
             <a href="#learning"><span>Certifications</span><span>3</span></a>
         </div>
     </div>
@@ -1057,7 +1473,7 @@ a.talks-player__cover:hover {
 
 <main>
 
-    <section id="talks" class="section" aria-label="Talks and Demos">
+    <section id="youtube" class="section" aria-label="Videos and Demos">
         <div class="wrap">
             <div class="section-head">
                 <div><span class="eyebrow">Feature</span><h2>YouTube Playlist</h2></div>
@@ -1076,6 +1492,116 @@ a.talks-player__cover:hover {
                 </div>
             </div>
             <script type="application/json" id="talks-data">[{"title":"Tetris — Official Trailer | Apple TV","videoId":"-BLM1naCfME","href":null,"img":"assets/youtube/covers/tetris.big.webp","thumb":"assets/youtube/covers/tetris.small.webp","actions":[{"label":"Watch","href":"https://tv.apple.com/us/movie/tetris/umc.cmc.4evmgcam356pzgxs2l7a18d7b"}]},{"title":"Gaming Historian: The Story of Tetris","videoId":"_fQtxKmgJC8","href":null,"img":null,"thumb":null,"actions":[]},{"title":"How Graphics worked on the Nintendo Game Boy","videoId":"zQE1K074v3s","href":null,"img":null,"thumb":null,"actions":[{"label":"Podcast","href":"https://player.fm/series/the-real-mvp"}]},{"title":"How Graphics worked on the Nintendo Game Boy Color","videoId":"ZEJVOH6Pxkg","href":null,"img":null,"thumb":null,"actions":[{"label":"Watch","href":"https://www.youtube.com/watch?v=ZEJVOH6Pxkg"}]},{"title":"Retro Tech: Game Boy\n","videoId":"Oy8zSYKkczI","href":null,"img":"assets/youtube/covers/gameboy.big.png","thumb":"assets/youtube/covers/gameboy.small.avif","actions":[{"label":"YouTube Channel","href":"https://www.youtube.com/@mkbhd"}]}]</script>
+        </div>
+    </section>
+
+    <section id="press" class="section" aria-label="In Print">
+        <div class="wrap">
+            <div class="section-head">
+                <div><span class="eyebrow">Archive</span><h2>In the Media</h2></div>
+                <span class="section-head__note" data-note>Articles and Books</span>
+            </div>
+            <div class="print-panel" data-rv>
+                <div class="print-panel__nameplate">
+                    <span>The Archive</span>
+                </div>
+                <div class="magazine-shelf">
+                    <article class="magazine-cover">
+                        <h3>Web Analytics 🇮🇹<br><span style="font-size: 12px;">(2009 - Contributor)</span></h3>
+                        <a class="cover-link" href="https://www.amazon.it/Web-analytics-segreto-progetto-successo/dp/8820349353/ref=monarch_sidesheet" title="Web Analytics" target="_blank">
+                            <img src="assets/press/magazines/200906_it-web-analytics/copertina-new.webp" width="200" height="285" alt="Web Analytics" loading="lazy">
+                        </a><div class="card-actions"><a class="text-link" href="https://www.amazon.it/Web-analytics-segreto-progetto-successo/dp/8820349353/ref=monarch_sidesheet" title="Web Analytics" target="_blank">Buy on Amazon</a></div>
+                    </article>
+                    <article class="magazine-cover">
+                        <h3>Looking Glass 🇬🇧<br><span style="font-size: 12px;">(2007/06 - Author)</span></h3>
+                        <a class="cover-link" href="assets/press/magazines/200706_linux-magazine-n79/en_looking-glass.pdf" title="Looking Glass" target="_blank">
+                            <img src="assets/press/magazines/200706_linux-magazine-n79/cover.webp" width="200" height="285" alt="Looking Glass" loading="lazy">
+                        </a>
+                        <div class="card-actions">
+                            <details class="dl-dropdown">
+                                <summary class="dl-summary">Download <i class="ti ti-chevron-down" aria-hidden="true"></i></summary>
+                                <div class="dl-menu">
+                                    <a href="assets/press/magazines/200706_linux-magazine-n79/en_looking-glass.pdf" target="_blank">🇬🇧 English</a>
+                                    <a href="assets/press/magazines/200706_linux-magazine-n79/pt_looking-glass.pdf" target="_blank">🇵🇹 Português</a>
+                                </div>
+                            </details>
+                        </div>
+                    </article>
+                    <article class="magazine-cover">
+                        <h3>Sorting Algorithms 🇮🇹<br><span style="font-size: 12px;">(2007/05 - Author)</span></h3>
+                        <a class="cover-link" href="assets/press/magazines/200705_computer-programming/articolo01-insertion-sort.pdf" title="Sorting Algorithms" target="_blank">
+                            <img src="assets/press/magazines/200705_computer-programming/cover.webp" width="200" height="285" alt="Sorting Algorithms" loading="lazy">
+                        </a>
+                        <div class="card-actions">
+                            <details class="dl-dropdown">
+                                <summary class="dl-summary">Download <i class="ti ti-chevron-down" aria-hidden="true"></i></summary>
+                                <div class="dl-menu">
+                                    <a href="assets/press/magazines/200705_computer-programming/articolo01-insertion-sort.pdf" target="_blank">Part 1 · Insertion Sort</a>
+                                    <a href="assets/press/magazines/200705_computer-programming/articolo02-merge-sort.pdf" target="_blank">Part 2 · Merge Sort</a>
+                                    <a href="assets/press/magazines/200705_computer-programming/articolo03-heap-sort.pdf" target="_blank">Part 3 · Heap Sort</a>
+                                    <a href="assets/press/magazines/200705_computer-programming/articolo04-quick-sort.pdf" target="_blank">Part 4 · Quick Sort</a>
+                                </div>
+                            </details>
+                        </div>
+                    </article>
+                    <article class="magazine-cover">
+                        <h3>SUSE Linux 🇮🇹<br><span style="font-size: 12px;">(2005/12 - Author)</span></h3>
+                        <a class="cover-link" href="assets/press/magazines/200512_linux-magazine-n58/it_suse-linux.pdf" title="SUSE Linux" target="_blank">
+                            <img src="assets/press/magazines/200512_linux-magazine-n58/cover.webp" width="200" height="285" alt="SUSE Linux" loading="lazy">
+                        </a><div class="card-actions"><a class="text-link" href="assets/press/magazines/200512_linux-magazine-n58/it_suse-linux.pdf" title="SUSE Linux" target="_blank">Download PDF</a></div>
+                    </article>
+                    <article class="magazine-cover">
+                        <h3>Qemu 🇬🇧<br><span style="font-size: 12px;">(2005/03 - Author)</span></h3>
+                        <a class="cover-link" href="assets/press/magazines/200503_linux-magazine-n52/en_qemu-virtual-benefits.pdf" title="Qemu" target="_blank">
+                            <img src="assets/press/magazines/200503_linux-magazine-n52/cover.webp" width="200" height="285" alt="Qemu" loading="lazy">
+                        </a>
+                        <div class="card-actions">
+                            <details class="dl-dropdown">
+                                <summary class="dl-summary">Download <i class="ti ti-chevron-down" aria-hidden="true"></i></summary>
+                                <div class="dl-menu">
+                                    <a href="assets/press/magazines/200503_linux-magazine-n52/en_qemu-virtual-benefits.pdf" target="_blank">🇬🇧 English</a>
+                                    <a href="https://www.linux-community.de/ausgaben/linuxuser/2005/03/systememulation-mit-qemu/" target="_blank">🇩🇪 Deutsch</a>
+                                    <a href="assets/press/magazines/200503_linux-magazine-n52/es_qemu-virtual-benefits.pdf" target="_blank">🇪🇸 Español</a>
+                                </div>
+                            </details>
+                        </div>
+                    </article>
+                    <article class="magazine-cover magazine-cover--disc">
+                        <h3>&lt;TAG/&gt; N.6 🇮🇹<br><span style="font-size: 12px;">(2004/02 - Author)</span></h3>
+                        <a class="cover-link" href="assets/press/downloads/script_tagml.zip" title="&lt;TAG/&gt; N.6" target="_blank">
+                            <img src="assets/press/magazines/200402_tag-magazine-n6/cover-v2.webp" width="200" height="285" alt="&lt;TAG/&gt; N.6" loading="lazy" style="margin: 32px 0; aspect-ratio: 1;">
+                        </a>
+                        <div class="card-actions">
+                            <details class="dl-dropdown">
+                                <summary class="dl-summary">Download <i class="ti ti-chevron-down" aria-hidden="true"></i></summary>
+                                <div class="dl-menu">
+                                    <a href="assets/press/downloads/script_tagml.zip" target="_blank">Download Script 📦</a>
+                                    <a href="https://archive.org/download/tag-6-win" target="_blank">Download ISO 💿</a>
+                                </div>
+                            </details>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <div id="tutorials" data-rv>
+                <a class="tutorial-card" href="https://www.html.it/guide/guida-programmazione-di-base/" title="Programmazione 🇮🇹" target="_blank">
+                    <img src="assets/press/tutorials/logo_programming.webp" alt="Programmazione 🇮🇹" loading="lazy">
+                    <div><h4>Programmazione 🇮🇹</h4><span>Leggi su Html.it</span></div>
+                </a>
+                <a class="tutorial-card" href="https://www.html.it/guide/guida-c/" title="Linguaggio C 🇮🇹" target="_blank">
+                    <img src="assets/press/tutorials/logo_c-language.webp" alt="Linguaggio C 🇮🇹" loading="lazy">
+                    <div><h4>Linguaggio C 🇮🇹</h4><span>Leggi su Html.it</span></div>
+                </a>
+                <a class="tutorial-card" href="https://www.html.it/guide/guida-ubuntu-linux/" title="Ubuntu Linux 🇮🇹" target="_blank">
+                    <img src="assets/press/tutorials/logo_ubuntu.webp" alt="Ubuntu Linux 🇮🇹" loading="lazy">
+                    <div><h4>Ubuntu Linux 🇮🇹</h4><span>Leggi su Html.it</span></div>
+                </a>
+                <a class="tutorial-card" href="https://www.html.it/author/fabriziociacchi/" title="PHP Scripts 🇮🇹" target="_blank">
+                    <img src="assets/press/tutorials/logo_php.webp" alt="PHP Scripts 🇮🇹" loading="lazy">
+                    <div><h4>PHP Scripts 🇮🇹</h4><span>Vedi su Html.it</span></div>
+                </a>
+            </div>
         </div>
     </section>
 
@@ -1145,10 +1671,7 @@ a.talks-player__cover:hover {
             <div class="site-footer__name">John Smith</div>
             <div class="site-footer__role">Software Developer</div>
         </div>
-        <div class="site-footer__badges">
-                <a class="site-footer__badge" href="#" target="_blank" rel="noopener">
-                    <img src="assets/footer/badges/verified.svg" alt="Validated site" loading="lazy">
-                </a>
+        <div class="site-footer__badges"><a class="site-footer__badge" href="mailto:hello@example.com">hello@example.com</a>
         </div>
     </div>
 </footer>
@@ -1197,6 +1720,50 @@ if (document.readyState === 'loading') {
 } else {
     initCoreAssets();
 }
+
+
+/* ---- dark-mode ---- */
+/**
+ * modules/dark-mode/client.js -- exposes the manual light/dark override
+ * hook. This step ships the mechanism only; wiring a visible toggle control
+ * into header/footer chrome is a fast follow-on once a chrome module wants
+ * one -- any future button just needs `data-theme-toggle` on itself (auto
+ * wired below) or to call `window.sitekitSetTheme(theme)` directly.
+ */
+(function () {
+    function setTheme(theme) {
+        var root = document.documentElement;
+        if (theme === 'light' || theme === 'dark') {
+            try {
+                localStorage.setItem('sitekit-theme', theme);
+            } catch (e) {
+                /* localStorage unavailable (private mode, etc.) -- degrade to session-only */
+            }
+            root.setAttribute('data-theme', theme);
+        } else {
+            try {
+                localStorage.removeItem('sitekit-theme');
+            } catch (e) {
+                /* ignore */
+            }
+            root.removeAttribute('data-theme');
+        }
+    }
+
+    function currentTheme() {
+        var attr = document.documentElement.getAttribute('data-theme');
+        if (attr === 'light' || attr === 'dark') return attr;
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    window.sitekitSetTheme = setTheme;
+
+    document.querySelectorAll('[data-theme-toggle]').forEach(function (el) {
+        el.addEventListener('click', function () {
+            setTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+        });
+    });
+})();
 
 
 /* ---- youtube ---- */

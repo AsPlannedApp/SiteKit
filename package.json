@@ -11,5 +11,8 @@
   "scripts": {
     "generate": "node bin/cli.js generate",
     "check": "node bin/cli.js check"
+  },
+  "devDependencies": {
+    "subset-font": "^2.5.0"
   }
 }
