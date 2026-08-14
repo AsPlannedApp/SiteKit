@@ -1,12 +1,12 @@
 {
   "eyebrow": "Software developer",
-  "name": "John",
-  "nameHighlight": "Smith",
+  "name": "Alex",
+  "nameHighlight": "Morgan",
   "tagline": "Personal Homepage",
   "issueIndexLabel": "Content",
   "ctas": [
-    { "label": "Read my Blog", "shortLabel": "Blog", "href": "https://myblog.com", "icon": "ti-writing-sign", "variant": "opposite", "external": true },
-    { "label": "Email", "href": "mailto:email@example.com", "icon": "ti-mail", "variant": "ghost", "external": true },
-    { "label": "GitHub", "href": "https://github.com/", "icon": "ti-brand-github", "variant": "ghost", "external": true }
+    { "label": "Read the Blog", "shortLabel": "Blog", "href": "#blog", "icon": "ti-writing-sign", "variant": "opposite", "external": false },
+    { "label": "Email", "href": "mailto:alex.morgan@example.com", "icon": "ti-mail", "variant": "ghost", "external": false },
+    { "label": "View Code", "shortLabel": "Code", "href": "#git-contributions", "icon": "ti-code", "variant": "ghost", "external": false }
   ]
 }

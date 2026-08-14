@@ -26,16 +26,19 @@
  * since a brand's hue is meant to read the same in both modes.
  */
 
-const DARK_DECLARATIONS = `    --bg-page: #343434;
+const DARK_DECLARATIONS = `    --brand: var(--brand-light);
+    --bg-page: #343434;
+    --bg-panel: color-mix(in srgb, var(--brand) 6%, #343434);
     --surface-muted: rgba(255, 255, 255, .06);
     --surface-hover: rgba(255, 255, 255, .08);
     --surface-active: color-mix(in srgb, var(--brand) 20%, var(--bg-page));
     --fg-body: #EDEDED;
     --fg-muted: #A3A3A3;
     --fg-note: #A3A3A3;
-    --fg-accent: var(--brand-light);
+    --fg-accent: var(--brand-opposite-light);
     --border-hairline: rgba(255, 255, 255, .15);
     --border-strong: rgba(255, 255, 255, .25);
+    --border-dotted: rgba(255, 255, 255, .2);
     --shadow-ambient: rgba(0, 0, 0, .5);
     --surface-hover-ghost: rgba(255, 255, 255, .08);
     --scrollbar-track: rgba(255, 255, 255, .08);

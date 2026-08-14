@@ -4,5 +4,6 @@
   "template": "./template.js",
   "styles": "./styles/base.css",
   "client": "./client.js",
+  "generatedAssets": ["fonts/tabler-icons-subset.min.css"],
   "assetsExclude": ["fonts/tabler-icons-full.woff2", "fonts/tabler-icons-map.json"]
 }

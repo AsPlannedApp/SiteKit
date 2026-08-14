@@ -4,8 +4,7 @@ import { escapeHtml } from '../../src/core/html-util.js';
  * modules/footer/template.js
  *
  * The simplest module in the set: no fetchable sources, no live/baked split,
- * one small nested asset (badges/verified.svg) to prove ctx.asset() works
- * end to end.
+ * Optional nested badge assets prove ctx.asset() works end to end.
  *
  * content.extraHtml is the one deliberate exception to this codebase's
  * usual escapeHtml-everything convention: it's raw, author-controlled HTML
@@ -22,7 +21,7 @@ export function summary() {
     return null;
 }
 
-export function render(content, config, mode, ctx) {
+export function render({ content, ctx }) {
     const badges = (content.badges || [])
         .map(
             (badge) => `

@@ -27,7 +27,10 @@
 
 .site-nav {
     display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
     align-items: center;
+    justify-content: center;
     gap: clamp(.9rem, 2.5vw, 1.75rem);
     overflow-x: auto;
     font-size: .78rem;
@@ -47,6 +50,19 @@
 .site-nav [data-nav-icon] {
     display: none;
     font-size: 1.15rem;
+}
+
+.site-nav.is-icons-only {
+    justify-content: flex-end;
+    gap: clamp(.55rem, 2.5vw, 1.25rem);
+}
+
+.site-nav.is-icons-only [data-nav-label] {
+    display: none;
+}
+
+.site-nav.is-icons-only [data-nav-icon] {
+    display: inline-flex;
 }
 
 .site-header__note {
@@ -106,21 +122,4 @@
 
 :root[data-theme="dark"] .theme-toggle [data-theme-icon="moon"] {
     display: none;
-}
-
-@media (max-width: 450px) {
-    [data-nav-label] {
-        display: none;
-    }
-
-    .site-nav [data-nav-icon] {
-        display: inline-flex;
-    }
-
-    .site-nav {
-        flex: 1 1 auto;
-        justify-content: flex-end;
-        gap: 1.25rem;
-        overflow: visible;
-    }
 }

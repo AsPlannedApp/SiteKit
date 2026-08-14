@@ -5,7 +5,7 @@ import { escapeHtml } from '../../src/core/html-util.js';
  *
  * The "In this issue" list is NOT hand-authored data on this module --
  * it's built from ctx.sections (every enabled content-section module's summary()/
- * countOverride), so it grows automatically as Step 3/4/5 add modules,
+ * countOverride), so it grows automatically as modules are added,
  * with no changes needed here. An optional avatar image (not present in
  * the source site) demonstrates a nested module asset path
  * (images/avatar-placeholder.svg -> /assets/hero/images/avatar-placeholder.svg).
@@ -42,7 +42,7 @@ function renderIssueIndex(content, ctx) {
         </div>`;
 }
 
-export function render(content, config, mode, ctx) {
+export function render({ content, config, ctx }) {
     const avatar = content.avatar
         ? `<img class="hero-avatar" src="${ctx.asset(content.avatar)}" alt="${escapeHtml(content.name)}">`
         : '';

@@ -1,5 +1,5 @@
 /* core-assets client.js: generic, always-shipped browser behaviors that don't
- * belong to any single content module. Kept deliberately small in Step 1;
+ * belong to any single content module. Kept deliberately small;
  * image-fallback / download-dropdown wiring join here as the modules that
  * need them land (press, code-activity). */
 
@@ -31,7 +31,22 @@ function setupRevealOnScroll() {
     setTimeout(() => items.forEach((el) => el.classList.add('rv-in')), 3000);
 }
 
+function setupStickyHeaderOffset() {
+    const header = document.querySelector('.site-header');
+    if (!header) return;
+
+    const sync = () => document.documentElement.style.setProperty('--header-h', `${header.offsetHeight - 24}px`);
+    sync();
+
+    if ('ResizeObserver' in window) {
+        new ResizeObserver(sync).observe(header);
+    } else {
+        window.addEventListener('resize', sync, { passive: true });
+    }
+}
+
 function initCoreAssets() {
+    setupStickyHeaderOffset();
     setupRevealOnScroll();
 }
 

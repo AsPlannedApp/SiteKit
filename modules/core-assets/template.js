@@ -10,7 +10,7 @@
  *
  * A plain, synchronous <link rel="stylesheet"> -- not the classic
  * preload-as-style-then-swap-rel-onload trick. That trick was ported from
- * asplanned-fabrizio (a real HTTPS-served site) to defer a genuinely large
+ * a production HTTPS-served site to defer a genuinely large
  * font-adjacent CSS fetch off the critical render path; it's also known to
  * be unreliable over file:// in several browsers (the preload's onload
  * doesn't fire the same way for local files, silently leaving the
@@ -35,7 +35,7 @@ export function summary() {
     return null;
 }
 
-export function render(content, config, mode, ctx) {
+export function render({ ctx }) {
     const href = ctx.asset('fonts/tabler-icons-subset.min.css');
 
     return {

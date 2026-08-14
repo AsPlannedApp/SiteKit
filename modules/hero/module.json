@@ -1,7 +1,6 @@
 {
   "id": "hero",
   "kind": "chrome",
-  "requiresCoreAssets": [],
   "contentSchema": "./content.schema.json",
   "template": "./template.js",
   "styles": "./styles.css"

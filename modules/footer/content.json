@@ -1,8 +1,8 @@
 {
-  "name": "John Smith",
+  "name": "Alex Morgan",
   "role": "Software Developer",
   "badges": [],
   "extraHtml": [
-    "<a class=\"site-footer__badge\" href=\"mailto:hello@example.com\">hello@example.com</a>"
+    "<a class=\"site-footer__badge\" href=\"mailto:alex.morgan@example.com\">alex.morgan@example.com</a>"
   ]
 }

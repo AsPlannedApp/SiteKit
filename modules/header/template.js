@@ -3,7 +3,7 @@ import { escapeHtml } from '../../src/core/html-util.js';
 /**
  * modules/header/template.js
  *
- * Nav links are built generically from ctx.sections (Step 2's summary() pass)
+ * Nav links are built generically from ctx.sections (the summary pass)
  * rather than hardcoding the site's five built-in sections -- so adding a new
  * content-section module later (gallery, timeline, ...) needs zero header
  * changes as long as its module.json declares navLabel/navIcon/anchor.
@@ -13,13 +13,13 @@ export function summary() {
     return null; // chrome, not a nav-linked content section
 }
 
-export function render(content, config, mode, ctx) {
+export function render({ content, config, ctx }) {
     const navLinks = ctx.sections
         .map((s) => {
             const icon = s.navIcon
                 ? `<i class="ti ${escapeHtml(s.navIcon)}" data-nav-icon aria-hidden="true"></i>`
                 : '';
-            return `<a href="#${escapeHtml(s.anchor)}" title="${escapeHtml(s.navLabel)}">${icon}<span data-nav-label>${escapeHtml(s.navLabel)}</span></a>`;
+            return `<a href="#${escapeHtml(s.anchor)}" title="${escapeHtml(s.navLabel)}" aria-label="${escapeHtml(s.navLabel)}">${icon}<span data-nav-label>${escapeHtml(s.navLabel)}</span></a>`;
         })
         .join('\n            ');
 

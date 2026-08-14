@@ -32,6 +32,7 @@
 
 html {
     scroll-behavior: smooth;
+    --header-h: 40px;
 }
 
 body {
@@ -105,6 +106,10 @@ p {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
     [data-rv] {
         opacity: 1;
         transform: none;
@@ -115,7 +120,11 @@ p {
 /* ---------- section scaffolding ---------- */
 main .section {
     padding: clamp(1.25rem, 3vw, 2rem) 0;
-    scroll-margin-top: 20px;
+    scroll-margin-top: clamp(20px, var(--header-h, 40px), 29px);
+}
+
+#top {
+    scroll-margin-top: var(--header-h, 20px);
 }
 
 .section-head {

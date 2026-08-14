@@ -6,6 +6,16 @@
  * wired below) or to call `window.sitekitSetTheme(theme)` directly.
  */
 (function () {
+    var toggles = Array.from(document.querySelectorAll('[data-theme-toggle]'));
+
+    function syncToggles() {
+        var dark = currentTheme() === 'dark';
+        toggles.forEach(function (el) {
+            el.setAttribute('aria-pressed', String(dark));
+            el.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+        });
+    }
+
     function setTheme(theme) {
         var root = document.documentElement;
         if (theme === 'light' || theme === 'dark') {
@@ -23,6 +33,7 @@
             }
             root.removeAttribute('data-theme');
         }
+        syncToggles();
     }
 
     function currentTheme() {
@@ -33,9 +44,18 @@
 
     window.sitekitSetTheme = setTheme;
 
-    document.querySelectorAll('[data-theme-toggle]').forEach(function (el) {
+    toggles.forEach(function (el) {
         el.addEventListener('click', function () {
             setTheme(currentTheme() === 'dark' ? 'light' : 'dark');
         });
     });
+
+    syncToggles();
+
+    if (window.matchMedia) {
+        var preference = window.matchMedia('(prefers-color-scheme: dark)');
+        if (preference.addEventListener) preference.addEventListener('change', function () {
+            if (!document.documentElement.hasAttribute('data-theme')) syncToggles();
+        });
+    }
 })();
