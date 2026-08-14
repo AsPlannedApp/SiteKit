@@ -1,0 +1,11 @@
+{
+  "id": "git-contributions",
+  "kind": "content-section",
+  "navLabel": "Code",
+  "navIcon": "ti-terminal-2",
+  "anchor": "git-contributions",
+  "contentSchema": "./content.schema.json",
+  "template": "./template.js",
+  "styles": "./styles.css",
+  "client": "./client.js"
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["heading", "sources", "fallback", "repos"],
+  "properties": {
+    "eyebrow": { "type": "string" }, "heading": { "type": "string" }, "note": { "type": "string" }, "countOverride": {},
+    "sources": {
+      "type": "object", "required": ["github", "gitlab", "gists"],
+      "properties": {
+        "github": { "$ref": "#/definitions/provider" },
+        "gitlab": { "$ref": "#/definitions/provider" },
+        "gists": { "type": "object", "properties": { "url": { "type": "string" }, "limit": { "type": "integer", "minimum": 1, "maximum": 100 } }, "additionalProperties": false }
+      }, "additionalProperties": false
+    },
+    "fallback": {
+      "type": "object", "required": ["github", "gitlab", "gists"],
+      "properties": {
+        "github": { "$ref": "#/definitions/days" }, "gitlab": { "$ref": "#/definitions/days" },
+        "gists": { "type": "array", "items": { "$ref": "#/definitions/gist" } }
+      }, "additionalProperties": false
+    },
+    "repos": { "type": "array", "items": { "$ref": "#/definitions/repo" } }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "provider": { "type": "object", "required": ["label"], "properties": { "label": { "type": "string", "minLength": 1 }, "profileUrl": { "type": "string" }, "contributionsUrl": { "type": "string" }, "contributionsFile": { "type": "string", "minLength": 1 } }, "additionalProperties": false },
+    "day": { "type": "object", "required": ["date", "count"], "properties": { "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }, "count": { "type": "number", "minimum": 0 } }, "additionalProperties": false },
+    "days": { "type": "array", "items": { "$ref": "#/definitions/day" } },
+    "gist": { "type": "object", "required": ["title", "url"], "properties": { "title": { "type": "string" }, "url": { "type": "string" }, "language": { "type": "string" } }, "additionalProperties": false },
+    "repo": { "type": "object", "required": ["title", "description", "url"], "properties": { "title": { "type": "string" }, "description": { "type": "string" }, "url": { "type": "string" }, "language": { "type": "string" }, "coverImage": { "type": "string" } }, "additionalProperties": false }
+  }
+}

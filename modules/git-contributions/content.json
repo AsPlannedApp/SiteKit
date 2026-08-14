@@ -1,0 +1,33 @@
+{
+  "eyebrow": "Activity",
+  "heading": "Code and Contributions",
+  "note": "Projects, public contributions, and snippets",
+  "sources": {
+    "github": { "label": "GitHub", "profileUrl": "", "contributionsUrl": "" },
+    "gitlab": { "label": "GitLab", "profileUrl": "", "contributionsFile": "contribution.json" },
+    "gists": { "url": "", "limit": 6 }
+  },
+  "fallback": {
+    "github": [
+      { "date": "2026-08-03", "count": 3 },
+      { "date": "2026-08-05", "count": 8 },
+      { "date": "2026-08-10", "count": 2 },
+      { "date": "2026-08-12", "count": 12 }
+    ],
+    "gitlab": [
+      { "date": "2026-08-04", "count": 5 },
+      { "date": "2026-08-05", "count": 2 },
+      { "date": "2026-08-11", "count": 7 }
+    ],
+    "gists": [
+      { "title": "Useful shell shortcuts", "url": "https://example.com/gists/shell", "language": "Shell" },
+      { "title": "A tiny fetch helper", "url": "https://example.com/gists/fetch", "language": "JavaScript" },
+      { "title": "CSS layout notes", "url": "https://example.com/gists/css", "language": "CSS" }
+    ]
+  },
+  "repos": [
+    { "title": "eleventy", "description": "A simpler static site generator.", "url": "https://github.com/11ty/eleventy", "language": "JavaScript", "coverImage": "https://opengraph.githubassets.com/1/11ty/eleventy" },
+    { "title": "astro", "description": "The web framework for content-driven websites.", "url": "https://github.com/withastro/astro", "language": "TypeScript", "coverImage": "https://opengraph.githubassets.com/1/withastro/astro" },
+    { "title": "sharp", "description": "High-performance image processing for Node.js.", "url": "https://github.com/lovell/sharp", "language": "JavaScript", "coverImage": "https://opengraph.githubassets.com/1/lovell/sharp" }
+  ]
+}
