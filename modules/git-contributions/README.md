@@ -1,31 +1,12 @@
 # Git Contributions module
 
-The Git Contributions module combines a rolling contribution calendar, authored repository cards, and public GitHub gists. GitHub and GitLab-style contribution sources are resolved while SiteKit generates the page.
+![Contribution calendar, project cards, and gist links](./images/git-contributions.png)
 
-## Features
+Give your coding work a home outside any single platform. This module combines a 12-month activity calendar with projects you are proud of and a small list of public gists.
 
-- Combined 12-month GitHub and GitLab-style contribution calendar.
-- Generation-time remote JSON or module-relative static JSON sources.
-- Configurable provider labels and independent fallbacks.
-- Authored repository cards with optional cover images.
-- Public GitHub gist loading with authored fallback entries.
+## Add it to your site
 
-## Enable the module
-
-Add `git-contributions` to `modules.order` in `site.config.json`. Its position controls where it appears on the page and in the header navigation.
-
-```json
-{
-  "modules": {
-    "order": ["blog", "git-contributions", "job-history"],
-    "overrides": {}
-  }
-}
-```
-
-## Contribution providers
-
-Each provider has a visible `label` and may use a remote URL or a module-relative JSON asset:
+Add `git-contributions` to `modules.order` in `site.config.json`, then choose the sources in `modules/git-contributions/content.json`:
 
 ```json
 {
@@ -40,23 +21,20 @@ Each provider has a visible `label` and may use a remote URL or a module-relativ
       "profileUrl": "https://gitlab.com/example",
       "contributionsFile": "contribution.json"
     },
-    "gists": {
-      "url": "",
-      "limit": 6
-    }
+    "gists": { "url": "", "limit": 6 }
   }
 }
 ```
 
-- `label` controls the provider name in the legend and accessible day descriptions.
-- `contributionsFile` is relative to `modules/git-contributions/assets/` and takes precedence over `contributionsUrl`.
-- `contributionsUrl` is fetched during generation.
-- A GitHub `profileUrl` derives the public jogruber contribution endpoint when no explicit source is configured.
-- A GitHub profile also derives the public user-gists endpoint when `gists.url` is empty.
+For GitHub, a public profile URL can supply both the contribution and gist endpoints. For GitLab-style activity, a local JSON file is the most dependable option.
 
-## Static contribution JSON
+## Add projects and fallback content
 
-Static data can be a date-to-count object:
+`repos` contains the project cards you want to feature. Each one has a `title`, `description`, and `url`, plus optional `language` and `coverImage` fields.
+
+`fallback.github`, `fallback.gitlab`, and `fallback.gists` keep each part useful if its source is unavailable. They work independently, so one failed service does not hide the others.
+
+Contribution data can be a date-to-count object:
 
 ```json
 {
@@ -65,32 +43,14 @@ Static data can be a date-to-count object:
 }
 ```
 
-Or an array:
+Or an array of `{ "date": "2026-08-01", "count": 4 }` entries. Dates use `YYYY-MM-DD`, and counts cannot be negative.
 
-```json
-[
-  { "date": "2026-08-01", "count": 4 },
-  { "date": "2026-08-02", "count": 7 }
-]
-```
+## Good to know
 
-Dates use `YYYY-MM-DD`; counts must be non-negative numbers. Static files are copied to the generated module assets, establishing the same source URL contract for future browser-side refresh.
+- `contributionsFile` is relative to `modules/git-contributions/assets/` and takes priority over `contributionsUrl`.
+- Provider labels appear in the legend and in accessible descriptions.
+- The calendar scrolls horizontally on narrow screens; project cards reflow and gist links wrap naturally.
+- Dark mode follows the main SiteKit theme.
+- Public GitHub data is subject to third-party availability and rate limits.
 
-## Fallbacks, repositories, and gists
-
-`fallback.github` and `fallback.gitlab` use the same contribution shape. `fallback.gists` contains authored entries with a title, URL, and optional language. SiteKit uses each fallback independently when its corresponding source fails.
-
-`repos` contains authored project cards with `title`, `description`, `url`, optional `language`, and optional `coverImage`. Cover images may be external URLs or module-relative assets. The number of repository entries supplies the section count unless `countOverride` is set.
-
-## CORS and responsive behavior
-
-Generation-time requests are not restricted by browser CORS. Browser-side contribution loading is not active yet; when added, remote endpoints will need to allow the deployed origin. A module-relative contribution file avoids this issue and is the recommended GitLab-style source.
-
-The contribution panel remains centered and shrinks with its container, while the 53-week calendar scrolls horizontally when necessary. Repository cards reflow automatically, and gist pills wrap across lines. Dark mode follows the global SiteKit theme.
-
-## Known limitations
-
-- Browser-side contribution and gist refresh is not implemented yet.
-- GitHub data depends on public third-party and GitHub API availability and rate limits.
-- The visual calendar currently has two provider slots: GitHub and GitLab-style data.
-- Repository and fallback content must be maintained manually.
+The calendar currently has two activity sources—GitHub and GitLab-style data. Projects and fallback entries are maintained by you, which keeps the section selective rather than turning it into a complete mirror of your accounts.

@@ -1,33 +1,25 @@
 # SiteKit
 
-SiteKit builds a personal homepage from small, independent modules. Choose the sections you want, edit their JSON files, and generate a plain `index.html` that works without a framework or server.
+SiteKit is a small, modular starting point for a personal website. Pick the sections that feel like you, add your own words and images, and generate a fast static site you can host almost anywhere.
 
-The generated site is ordinary HTML, CSS, and JavaScript. You can open it directly from disk or deploy it to any static host. It is required to deploy the `assets/` folder together with your `index.html`
+| Mobile                                                                   | Light                                                                   | Dark                                                                  |
+|--------------------------------------------------------------------------|-------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| ![SiteKit homepage on a mobile screen](./docs/images/sitekit-mobile.png) | ![SiteKit homepage in its light theme](./docs/images/sitekit-light.png) | ![SiteKit homepage in its dark theme](./docs/images/sitekit-dark.png) | 
+
+There is no framework or server to maintain after generation—just an `index.html` file and its `assets/` folder.
 
 ## Make it yours
 
-1. Set your name, page description, and real canonical URL in `site.config.json`.
-2. Choose and order sections in `modules.order`.
-3. Edit each selected module's `modules/<name>/content.json`.
-4. Put images and downloads in that module's `assets/` folder.
+1. Add your name, tagline, description, and real website URL to `site.config.json`.
+2. Choose your sections and arrange them in `modules.order`.
+3. Replace the sample content in each section's `modules/<name>/content.json`.
+4. Put that section's images and downloads in its `assets/` folder.
 
-For example:
+Removing a name from `modules.order` hides that section. Moving a name changes its position on the page, in the navigation, and in the hero index.
 
-```json
-{
-  "modules": {
-    "order": [
-      "blog", "git-contributions", "photo-album",
-      "job-history", "youtube", "press", "learning"
-    ],
-    "overrides": {}
-  }
-}
-```
+## See it locally
 
-Removing a name disables that section. Reordering the names changes the page, header navigation, and hero index together.
-
-## Get started
+You need Node.js 20 or newer.
 
 ```bash
 npm install
@@ -35,19 +27,25 @@ npm run check
 npm run generate
 ```
 
-Open `index.html` to see the result.
+Open `index.html` in your browser. When you publish, upload both `index.html` and the generated root `assets/` folder.
 
-## Included modules
+## Choose your sections
 
-- [blog](./modules/blog/README.md) — Posts from an Atom or RSS 2.0 feed at generation time, with saved fallback posts.
-- [git-contributions](./modules/git-contributions/README.md) — GitHub and GitLab activity, repositories, and public GitHub gists.
-- [photo-album](./modules/photo-album/README.md) — A configurable 1–5 column *Polaroid* board with responsive build-generated previews and a full-screen viewer.
-- [job-history](./modules/job-history/README.md) — Alternating resume cards on a responsive timeline.
-- [youtube](./modules/youtube/README.md) — A video playlist with local or YouTube-provided covers.
-- [press](./modules/press/README.md) — publications, downloads, and tutorials.
-- [learning](./modules/learning/README.md) — certifications and course badges.
+- [Blog](./modules/blog/README.md) — share recent writing from an Atom or RSS feed.
+- [Git Contributions](./modules/git-contributions/README.md) — bring projects, public activity, and gists together.
+- [Photo Album](./modules/photo-album/README.md) — make a responsive Polaroid-style photo wall.
+- [Job History](./modules/job-history/README.md) — tell your career story as a timeline.
+- [YouTube](./modules/youtube/README.md) — collect videos, talks, demos, and related links.
+- [Press](./modules/press/README.md) — display publications, downloads, and tutorials.
+- [Learning](./modules/learning/README.md) — show certifications, courses, and achievements.
 
-Header, hero, footer, metadata, dark mode, fonts, and icons are included automatically. Optional extensions can be disabled independently in `site.config.json`:
+The header, introduction, footer, metadata, fonts, and icons come automatically.
+
+## Themes and finishing touches
+
+Choose the `default` or `asplanned` theme in `site.config.json`. Dark mode follows the visitor's system preference, can be changed from the header, and remembers their choice.
+
+Optional finishing touches live under `extensions`:
 
 ```json
 {
@@ -60,38 +58,25 @@ Header, hero, footer, metadata, dark mode, fonts, and icons are included automat
 }
 ```
 
-- **dark-mode** allows to switch the CSS from light to dark mode and vice-versa. The 'template' you choose should support dark-mode for this to work.
-- `og-meta` creates a 1200×630 social card from your identity, description, hostname, and theme. Open Graph crawlers require an absolute URL, so replace the sample `https://example.com/` canonical URL before publishing. Set `seo.ogImage` only when you want to use your own image instead.
-- The favicon and installable-app artwork are deliberately separate. Replace `modules/favicon/assets/favicon-source.png` or `modules/app-icon/assets/app-icon-source.png` with an opaque square image at least 1024×1024, then generate again. The app module creates the Chrome/Android manifest icons, a maskable icon, and the iPhone/iPad touch icon; it does not add offline caching.
+- `dark-mode` adds the light/dark switch when the chosen theme supports it.
+- `og-meta` creates a social-sharing image. Set a real `seo.canonicalUrl` before publishing, or use `seo.ogImage` for your own image.
+- `favicon` and `app-icon` create browser and home-screen artwork. Replace their 1024×1024 source images, then generate again.
 
-## Remote content and fallbacks
+## A little more detail
 
-Blog and contribution data are fetched while `npm run generate` runs. The browser never needs those services to display the finished page.
+Blog and contribution sources are fetched while SiteKit generates the page, so visitors do not have to wait for them. If a source is unavailable, SiteKit keeps going and uses the saved content in that module's `content.json`. Leave a source URL empty when you prefer fully authored content.
 
-If a remote source is unavailable, SiteKit prints a warning and uses the corresponding fallback from the module's `content.json`. GitHub, GitLab, and gists fall back independently.
-
-Leave source URLs empty to use only authored sample data. See the examples in [Architecture and module authoring](docs/architecture.md#build-time-data).
-
-## Themes
-
-Choose `default` or `asplanned` in `site.config.json`. Dark mode follows the visitor's operating-system preference and can be overridden with the header button.
-
-The generated page remembers the manual choice without flashing the wrong theme on the next visit.
-
-## Commands
+The most useful commands are:
 
 ```bash
-npm run check      # validate config, module content, HTML snippets, and assets
-npm test           # run core and data-adapter tests
-npm run generate   # rebuild index.html and generated assets
+npm run check              # check configuration, content, and assets
+npm test                   # run the test suite
+npm run generate           # rebuild the site
+npm run docs:screenshots   # refresh the README screenshots
 ```
 
-`index.html` and the root `assets/` directory are generated. Edit the source module files instead of changing generated output by hand.
+The root `index.html` and `assets/` directory are generated files. Make changes in `site.config.json` and the module folders instead of editing generated output by hand.
 
-For the photo album, keep only high-resolution PNG, JPG, or JPEG originals in `modules/photo-album/assets/photos/`, list them in its `content.json`, and choose `columns` from 1 through 5. Generation creates responsive WebP previews automatically; the originals remain available to the full-screen viewer.
-
-## Building a module
-
-Modules are intentionally self-contained and can be copied between SiteKit projects. The small public contract, schemas, asset rules, and build-time data lifecycle are documented in [docs/architecture.md](docs/architecture.md).
+Want to build or adapt a module? The public contract, schemas, asset rules, and data lifecycle are in [Architecture and module authoring](./docs/architecture.md).
 
 SiteKit is under active development and licensed under GPL-2.0.

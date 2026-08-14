@@ -1,31 +1,12 @@
 # Blog module
 
-The Blog module displays recent posts from an Atom or RSS 2.0 feed. SiteKit fetches and bakes posts during generation, then refreshes the cards from the configured feed after the generated page loads.
+![A row of recent article cards in the Blog module](./images/blog.png)
 
-## Features
+Bring your latest writing onto your homepage. SiteKit reads an Atom or RSS feed when it generates the page and keeps a few saved posts ready in case the feed cannot be reached.
 
-- Build-time feed loading for immediately available, indexable post cards.
-- Browser refresh after page load for newer posts.
-- Atom and RSS 2.0 parsing with common image formats.
-- Authored fallback posts when the feed is unavailable.
-- Optional archive link and configurable post limit.
+## Add it to your site
 
-## Enable the module
-
-Add `blog` to `modules.order` in `site.config.json`. Its array position controls where it appears on the page and in the header navigation.
-
-```json
-{
-  "modules": {
-    "order": ["blog", "git-contributions", "photo-album"],
-    "overrides": {}
-  }
-}
-```
-
-## Configuration
-
-Edit `modules/blog/content.json`:
+Add `blog` to `modules.order` in `site.config.json`, then edit `modules/blog/content.json`:
 
 ```json
 {
@@ -33,52 +14,39 @@ Edit `modules/blog/content.json`:
   "heading": "From the blog",
   "archiveLabel": "More articles →",
   "archiveUrl": "/blog/",
-  "source": {
-    "url": "/blog/feed",
-    "limit": 3
-  },
+  "source": { "url": "/blog/feed", "limit": 3 },
   "fallbackNotice": "The live feed is unavailable, so these saved articles are shown instead.",
   "fallback": [
     {
-      "title": "Saved post",
-      "url": "/blog/saved-post",
+      "title": "A saved post",
+      "url": "/blog/a-saved-post",
       "date": "August 1, 2026",
-      "excerpt": "This card remains available if the feed cannot be loaded.",
-      "image": "https://images.example.com/saved-post.webp"
+      "excerpt": "A short introduction that still appears when the feed is unavailable.",
+      "image": "https://images.example.com/post.webp"
     }
   ]
 }
 ```
 
-| Field | Description |
+The feed can contain up to 12 visible posts. Saved posts need a title, URL, and excerpt; the date, image, and icon are optional.
+
+## Good to know
+
+- A same-site feed such as `/blog/feed` is the easiest choice.
+- A feed on another domain must allow your website through CORS if you want the browser to refresh it after the page loads.
+- When a browser refresh fails, the posts already included during generation stay in place.
+- Relative feed URLs use `seo.canonicalUrl` during generation, so set that to your real website before publishing.
+- Cards use three columns on wide screens and one column below 760px. Dark mode follows the rest of SiteKit.
+
+## Configuration reference
+
+| Field | What it changes |
 | --- | --- |
-| `archiveLabel` | Optional label for the archive link. |
-| `archiveUrl` | Optional blog archive destination. |
-| `source.url` | Absolute or site-relative Atom/RSS feed URL. |
-| `source.limit` | Number of posts to display, from 1 through 12. |
-| `fallbackNotice` | Message shown when baked fallback posts are in use. |
-| `fallback` | Required authored posts used without a feed or after generation-time failure. |
-| `countOverride` | Optional value used instead of the derived post count. |
+| `archiveLabel` / `archiveUrl` | Optional link to the rest of your writing. |
+| `source.url` | Atom or RSS 2.0 feed, either absolute or site-relative. |
+| `source.limit` | Number of posts shown, from 1 to 12. |
+| `fallbackNotice` | Message shown when saved posts are being used. |
+| `fallback` | Posts kept as a dependable fallback. |
+| `countOverride` | Optional text or number for the hero index. |
 
-Fallback posts require `title`, `url`, and `excerpt`; `date`, `image`, and an icon class are optional.
-
-## Runtime loading and CORS
-
-Use a same-origin feed URL such as `/blog/feed` whenever possible. Origin includes protocol, hostname, and port, so a different subdomain is cross-origin too.
-
-A cross-origin feed can work during generation because Node.js does not enforce browser CORS. Browser refresh works only when the feed server returns an appropriate `Access-Control-Allow-Origin` header. If runtime loading or parsing fails, SiteKit leaves the generated cards unchanged.
-
-Relative feed URLs are resolved against `seo.canonicalUrl` during generation and against the deployed page in the browser. Runtime refresh requires an HTTP(S)-served page and is not supported when opening `index.html` directly through `file://`.
-
-## Feed and responsive behavior
-
-Atom entries use an alternate link, `published` or `updated`, and `content` or `summary`. RSS items use `link` or `guid`, `pubDate`, and `description` or `content:encoded`. Images can come from feed content, RSS enclosures, or Media RSS elements.
-
-Post cards use three columns on wide screens and one column below 760px. Dark mode follows the global SiteKit theme without module-specific configuration.
-
-## Known limitations
-
-- Feed dates are formatted using the `en-US` locale.
-- Remote post images are loaded from their original host and are not copied locally.
-- The browser refresh supports Atom and RSS XML, not JSON Feed.
-- Empty, malformed, timed-out, or unavailable feeds keep the generated posts in place.
+Feed dates currently use the `en-US` locale, remote images stay on their original host, and JSON Feed is not supported.

@@ -1,33 +1,14 @@
 # Job History module
 
-<img src="./images/job-history.png" alt="Job History module showing alternating career cards on a timeline" width="600">
+| Normal View                                               | Mobile View |
+|-----------------------------------------------------------|-------------|
+| ![Career cards arranged along a desktop timeline](./images/job-history.png) |      ![The career timeline rearranged into one mobile column](./images/job-history-mobile.png)       |
 
-The Job History module presents roles and career milestones as an alternating vertical timeline. Entries are authored directly in `content.json` and collapse into a single readable column on smaller screens.
+Tell the story of your work as a timeline rather than a dense résumé. Each role can include the details that mattered, along with links to a company, project, or piece of work.
 
-## Features
+## Add it to your site
 
-- Alternating left and right timeline cards on wide screens.
-- Period, role, company, location, and multiple description paragraphs.
-- Optional links for company pages, projects, or supporting material.
-- Automatically derived role count for the header and hero index.
-- Static HTML output with no client-side JavaScript.
-
-## Enable the module
-
-Add `job-history` to `modules.order` in `site.config.json`. Its array position controls where it appears on the page and in the header navigation.
-
-```json
-{
-  "modules": {
-    "order": ["photo-album", "job-history", "learning"],
-    "overrides": {}
-  }
-}
-```
-
-## Configuration
-
-Edit `modules/job-history/content.json`:
+Add `job-history` to `modules.order` in `site.config.json`, then edit `modules/job-history/content.json`:
 
 ```json
 {
@@ -52,31 +33,26 @@ Edit `modules/job-history/content.json`:
 }
 ```
 
-| Field | Description |
+Entries appear in the order you write them; SiteKit leaves flexible period labels such as “Now”, “Summer 2024”, or “2019 — 2022” entirely up to you.
+
+## Good to know
+
+- Cards alternate across the center line on wide screens.
+- Below 760px, the story becomes a single left-aligned column.
+- The timeline decoration stays out of the accessibility tree, while each role remains a semantic article.
+- Optional links are keyboard accessible and open in a new tab.
+- Dark mode follows the main SiteKit theme.
+
+## Configuration reference
+
+| Field | What it changes |
 | --- | --- |
-| `eyebrow` | Small label displayed above the section heading. |
-| `heading` | Required section heading. |
-| `note` | Optional note displayed beside the heading. |
-| `countOverride` | Optional value used instead of the derived role count. |
-| `entries` | Ordered array containing at least one career entry. |
-| `period` | Authored date range or period label. |
-| `role` | Job title or role. |
-| `company` | Company, client, or organization name. |
-| `location` | Optional office, city, or remote-work label. |
-| `paragraphs` | One or more descriptive paragraphs. |
-| `links` | Optional array of labeled URLs. |
+| `eyebrow`, `heading`, `note` | The section introduction. |
+| `entries` | One or more roles in display order. |
+| `period` | Your own date range or period label. |
+| `role`, `company`, `location` | The role heading and supporting details. |
+| `paragraphs` | One or more short pieces of role description. |
+| `links` | Optional labeled destinations. |
+| `countOverride` | Optional text or number for the hero index. |
 
-Entries appear in the same order as `content.json`; SiteKit does not parse or sort `period` values.
-
-## Responsive and accessible behavior
-
-On wide screens, entries alternate across the central timeline. Below 760px, every card moves into one left-aligned column with the timeline running along the left edge. Dark mode follows the global SiteKit theme without module-specific configuration.
-
-The timeline itself is decorative. Entry content remains ordinary semantic articles, while optional resources are keyboard-accessible links that open in a new tab.
-
-## Known limitations
-
-- Dates and entries are not sorted automatically.
-- Links are rendered as URLs and are not treated as module-relative assets.
-- The module does not provide filtering, expandable entries, or downloadable résumé generation.
-- Content changes require running SiteKit generation again.
+The module does not sort dates or create a downloadable résumé. Run SiteKit generation again after changing the content.

@@ -1,34 +1,12 @@
 # Press module
 
-<img src="./images/press.png" alt="Press module showing publication covers and tutorial cards" width="600">
+![A colorful publication shelf with tutorial cards](./images/press.png)
 
-The Press module presents publications, magazine appearances, downloadable articles, and related tutorials. Content is authored locally and rendered into the generated page without runtime JavaScript or remote data loading.
+Gather articles, interviews, magazine appearances, downloads, and related tutorials into a small personal newsstand. Everything is chosen and authored by you.
 
-## Features
+## Add it to your site
 
-- Horizontally scrollable publication shelf with local cover images.
-- Single actions for reading or downloading one resource.
-- Native download menus for publications available in several languages or formats.
-- Optional square-cover treatment for discs and other non-magazine artwork.
-- Responsive tutorial cards below the publication shelf.
-- External URLs and module-relative downloads can be used together.
-
-## Enable the module
-
-Add `press` to `modules.order` in `site.config.json`. Its array position controls where the section appears on the page and in the header navigation.
-
-```json
-{
-  "modules": {
-    "order": ["blog", "press", "learning"],
-    "overrides": {}
-  }
-}
-```
-
-## Configuration
-
-Edit `modules/press/content.json`:
+Add `press` to `modules.order` in `site.config.json`, then edit `modules/press/content.json`:
 
 ```json
 {
@@ -36,7 +14,6 @@ Edit `modules/press/content.json`:
   "heading": "In the Media",
   "note": "Articles, interviews, and tutorials",
   "panelLabel": "Publication Archive",
-  "countOverride": "100+",
   "magazines": [
     {
       "title": "Linux Magazine",
@@ -45,78 +22,41 @@ Edit `modules/press/content.json`:
       "role": "Author",
       "coverImage": "magazines/linux-magazine.webp",
       "action": {
-        "type": "dropdown",
-        "items": [
-          { "label": "English PDF", "href": "downloads/article-en.pdf" },
-          { "label": "Italian PDF", "href": "downloads/article-it.pdf" }
-        ]
+        "type": "single",
+        "label": "Read article",
+        "href": "https://example.com/article"
       }
-    }
-  ],
-  "tutorials": [
-    {
-      "title": "Build a Personal Site",
-      "note": "A practical introduction",
-      "href": "https://example.com/tutorial",
-      "image": "tutorials/build-site.webp"
     }
   ]
 }
 ```
 
-## Publication fields
+Put covers, tutorial images, and downloads below `modules/press/assets/`. Image paths are relative to that folder; destinations may be external URLs or local downloads.
 
-| Field | Description |
-| --- | --- |
-| `title` | Publication or article title. |
-| `flag` | Flag emoji or another short marker shown beside the title. |
-| `dateLabel` | Authored date or issue label, such as `2007/06`. |
-| `role` | Your relationship to the publication, such as `Author` or `Contributor`. |
-| `coverImage` | Cover path relative to `modules/press/assets/`. |
-| `coverSquare` | Optional square-cover presentation without the paper-style shadow. |
-| `action` | A `single` link or a `dropdown` containing at least two links. |
+## One link or a download menu
 
-A single action uses `type`, `label`, and `href`:
+A publication can have one `single` action or a `dropdown` with two or more choices:
 
 ```json
 {
   "action": {
-    "type": "single",
-    "label": "Read article",
-    "href": "https://example.com/article"
+    "type": "dropdown",
+    "items": [
+      { "label": "English PDF", "href": "downloads/article-en.pdf" },
+      { "label": "Italian PDF", "href": "downloads/article-it.pdf" }
+    ]
   }
 }
 ```
 
-Selecting a cover opens the single action or the first item in its dropdown.
+Use `coverSquare: true` for discs or other artwork that should not receive the magazine-style shadow. Tutorials need a `title`, `note`, `href`, and `image`.
 
-## Assets and tutorials
+## Good to know
 
-Store publication covers, tutorial images, and downloads under the module's `assets/` directory:
+- The publication shelf scrolls sideways rather than shrinking its covers.
+- Tutorial cards use four columns on wide screens, two below 1024px, and one below 600px.
+- Download menus use native browser controls and remain keyboard accessible without extra JavaScript.
+- Dark mode follows the main SiteKit theme.
+- Images are copied at their authored size, so prepare web-friendly files before adding them.
 
-```text
-modules/press/assets/
-  magazines/
-    linux-magazine.webp
-  tutorials/
-    build-site.webp
-  downloads/
-    article-en.pdf
-```
-
-`coverImage` and tutorial `image` must be module-relative asset paths. Publication actions and tutorial `href` values may be external URLs or module-relative files.
-
-Tutorial entries require `title`, `note`, `href`, and `image`. The `tutorialsLabel` configuration field is currently reserved but is not displayed by the template.
-
-## Responsive and accessible behavior
-
-The publication shelf scrolls horizontally instead of compressing its covers. Tutorial cards use four columns on wide screens, two below 1024px, and one below 600px. Dark mode follows the global SiteKit theme without module-specific configuration.
-
-Publication covers and tutorial cards are ordinary links. Multi-download actions use native `<details>` and `<summary>` controls, so they remain keyboard accessible without JavaScript.
-
-## Known limitations
-
-- Content is static and changes only when the site is generated again.
-- Cover and tutorial images are copied as authored; SiteKit does not resize them.
-- Dropdown actions always display the label `Download`.
-- The first dropdown item is always used as the publication cover's destination.
+For dropdown publications, the cover opens the first item and the visible menu label is currently “Download”. The reserved `tutorialsLabel` field is not displayed yet.
