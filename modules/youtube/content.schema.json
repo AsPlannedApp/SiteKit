@@ -11,7 +11,11 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["title", "img", "thumb"],
+        "required": ["title"],
+        "anyOf": [
+          { "required": ["videoId"] },
+          { "required": ["href"] }
+        ],
         "properties": {
           "title": { "type": "string" },
           "videoId": { "type": "string", "description": "YouTube video id -- click-to-embed. Use `href` instead for non-YouTube talks." },

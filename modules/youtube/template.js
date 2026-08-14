@@ -12,12 +12,12 @@ import { escapeHtml, resolveHref } from '../../src/core/html-util.js';
  * ctx.asset()/module-namespacing convention at all.
  */
 
-export function summary(content) {
+export function summary({ content }) {
     const playlist = content.youtube || [];
     return { label: 'Videos & demos', count: playlist.length };
 }
 
-export function render(content, config, mode, ctx) {
+export function render({ content, ctx }) {
     const playlist = (content.youtube || []).map((video) => ({
         title: video.title,
         videoId: video.videoId || null,
