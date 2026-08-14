@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "blog content",
+  "type": "object",
+  "required": ["heading", "fallback"],
+  "properties": {
+    "eyebrow": { "type": "string" },
+    "heading": { "type": "string", "minLength": 1 },
+    "archiveLabel": { "type": "string" },
+    "archiveUrl": { "type": "string" },
+    "fallbackNotice": { "type": "string" },
+    "countOverride": {},
+    "source": {
+      "type": "object",
+      "properties": {
+        "url": { "type": "string" },
+        "limit": { "type": "integer", "minimum": 1, "maximum": 12 }
+      },
+      "additionalProperties": false
+    },
+    "fallback": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/post" }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "post": {
+      "type": "object",
+      "required": ["title", "url", "excerpt"],
+      "properties": {
+        "title": { "type": "string" },
+        "url": { "type": "string" },
+        "date": { "type": "string" },
+        "excerpt": { "type": "string" },
+        "image": { "type": "string" },
+        "icon": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

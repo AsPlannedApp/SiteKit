@@ -1,0 +1,11 @@
+{
+  "id": "blog",
+  "kind": "content-section",
+  "navLabel": "Blog",
+  "navIcon": "ti-writing-sign",
+  "anchor": "blog",
+  "contentSchema": "./content.schema.json",
+  "template": "./template.js",
+  "styles": "./styles.css",
+  "client": "./client.js"
+}

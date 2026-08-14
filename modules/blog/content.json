@@ -1,0 +1,31 @@
+{
+  "eyebrow": "Reading",
+  "heading": "From Smashing Magazine",
+  "archiveLabel": "More articles →",
+  "archiveUrl": "https://www.smashingmagazine.com/articles/",
+  "source": { "url": "https://www.smashingmagazine.com/feed/", "limit": 3 },
+  "fallbackNotice": "The live feed is unavailable, so these saved articles are shown instead.",
+  "fallback": [
+    {
+      "title": "New EU Guidelines For AI Labelling",
+      "url": "https://www.smashingmagazine.com/2026/08/eu-guidelines-ai-labelling/",
+      "date": "August 13, 2026",
+      "excerpt": "New EU guidelines, why AI sparkles aren’t enough, when AI labels are required, and what the rules mean for AI-powered features and products.",
+      "image": "https://files.smashing.media/articles/eu-guidelines-ai-labelling/eu-guidelines-ai-labelling.jpg"
+    },
+    {
+      "title": "Building Tactile UX: Honoring Intentional Design With Lottie",
+      "url": "https://www.smashingmagazine.com/2026/08/building-tactile-ux-honoring-intentional-design-lottie/",
+      "date": "August 11, 2026",
+      "excerpt": "When building a highly interactive, tactile web experience, the architecture must serve the art direction and preserve intentional motion.",
+      "image": "https://files.smashing.media/articles/building-tactile-ux-honoring-intentional-design-lottie/building-tactile-ux-honoring-intentional-design-lottie.jpg"
+    },
+    {
+      "title": "How Baseline Can Help You Ship Less JavaScript",
+      "url": "https://www.smashingmagazine.com/2026/08/how-baseline-can-help-ship-less-javascript/",
+      "date": "August 7, 2026",
+      "excerpt": "The gap between “you need a library for this” and “the browser does this” keeps closing. Here’s how to audit dependencies against the web platform.",
+      "image": "https://files.smashing.media/articles/how-baseline-can-help-ship-less-javascript/how-baseline-can-help-ship-less-javascript.jpg"
+    }
+  ]
+}
