@@ -50,6 +50,13 @@ test('theme colors resolve to literals for raster assets', () => {
     assert.equal(resolveThemeColorLiteral('var(--missing)', colors, '#000000'), '#000000');
 });
 
+test('theme-sensitive controls preserve contrast and authored badge dimensions', () => {
+    const pressCss = readFileSync(path.resolve('modules/press/styles.css'), 'utf8');
+    const footerCss = readFileSync(path.resolve('modules/footer/styles.css'), 'utf8');
+    assert.match(pressCss, /\.dl-dropdown \.dl-menu a \{[\s\S]*color: var\(--bg-page\)/);
+    assert.match(footerCss, /\.site-footer__badge img \{[\s\S]*width: auto;[\s\S]*height: auto;/);
+});
+
 test('Open Graph metadata uses generated defaults and preserves authored overrides', () => {
     const config = { ...baseConfig, identity: { name: 'Alex & Morgan', tagline: 'Developer' }, seo: { title: 'A title', description: 'A description', canonicalUrl: 'https://example.test/' } };
     const generatedCtx = buildAssetCtx('og-meta');
