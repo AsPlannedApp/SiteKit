@@ -43,7 +43,6 @@
 }
 
 .site-footer__badge img {
-    width: 22px;
-    height: 22px;
+    max-width: 100%;
     display: block;
 }
