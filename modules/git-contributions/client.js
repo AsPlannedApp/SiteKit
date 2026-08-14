@@ -66,7 +66,7 @@
         var list = document.querySelector('[data-gist-list]');
         if (!list || !Array.isArray(value)) return;
         var gists = value.slice(0, limit).map(function (gist) {
-            return { title: gist.title || gist.description || 'Untitled gist', url: safeUrl(gist.url || gist.html_url), language: gistLanguage(gist) };
+            return { title: gist.title || gist.description || 'Untitled gist', url: safeUrl(gist.html_url || gist.url), language: gistLanguage(gist) };
         }).filter(function (gist) { return gist.url; });
         if (!gists.length) return;
 

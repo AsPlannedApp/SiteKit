@@ -32,7 +32,7 @@ function normalizeGists(value, limit) {
         const files = Object.values(gist.files || {});
         return {
             title: gist.title || gist.description || 'Untitled gist',
-            url: gist.url || gist.html_url || '',
+            url: gist.html_url || gist.url || '',
             language: gist.language || files[0]?.language || '',
         };
     }).filter((gist) => gist.url);

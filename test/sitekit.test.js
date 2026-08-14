@@ -257,7 +257,7 @@ test('git adapters normalize common provider shapes', () => {
     assert.equal(usernameFromProfile('https://github.com/octocat/'), 'octocat');
     assert.deepEqual(normalizeDays({ contributions: [{ date: '2026-01-01', count: 4, level: 2 }] }), [{ date: '2026-01-01', count: 4 }]);
     assert.deepEqual(normalizeDays({ '2026-01-02': 3 }), [{ date: '2026-01-02', count: 3 }]);
-    assert.deepEqual(normalizeGists([{ description: 'Snippet', html_url: 'https://gist.test/1', files: { a: { language: 'JavaScript' } } }], 2), [
+    assert.deepEqual(normalizeGists([{ description: 'Snippet', url: 'https://api.gist.test/1', html_url: 'https://gist.test/1', files: { a: { language: 'JavaScript' } } }], 2), [
         { title: 'Snippet', url: 'https://gist.test/1', language: 'JavaScript' },
     ]);
 });
