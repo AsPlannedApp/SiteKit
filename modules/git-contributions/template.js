@@ -32,7 +32,7 @@ function normalizeGists(value, limit) {
         const files = Object.values(gist.files || {});
         return {
             title: gist.title || gist.description || 'Untitled gist',
-            url: gist.url || gist.html_url || '',
+            url: gist.html_url || gist.url || '',
             language: gist.language || files[0]?.language || '',
         };
     }).filter((gist) => gist.url);
@@ -63,6 +63,11 @@ function githubContributionUrl(provider) {
     return provider.contributionsUrl || (username ? `https://github-contributions-api.jogruber.de/v4/${encodeURIComponent(username)}?y=last` : '');
 }
 
+function githubGistUrl(content) {
+    const githubUser = usernameFromProfile(content.sources?.github?.profileUrl);
+    return content.sources?.gists?.url || (githubUser ? `https://api.github.com/users/${encodeURIComponent(githubUser)}/gists` : '');
+}
+
 function jsonForHtml(value) {
     return JSON.stringify(value).replaceAll('<', '\\u003c').replaceAll('>', '\\u003e').replaceAll('&', '\\u0026');
 }
@@ -72,10 +77,9 @@ export async function prepare({ content, fetch, moduleDir }) {
     const fallback = content.fallback || {};
     const githubProvider = content.sources.github || {};
     const gitlabProvider = content.sources.gitlab || {};
-    const githubUser = usernameFromProfile(githubProvider.profileUrl);
     const githubUrl = githubContributionUrl(githubProvider);
     const gitlabUrl = gitlabProvider.contributionsUrl || '';
-    const gistUrl = content.sources.gists.url || (githubUser ? `https://api.github.com/users/${encodeURIComponent(githubUser)}/gists` : '');
+    const gistUrl = githubGistUrl(content);
 
     async function resolveRemote(label, url, fallbackValue, normalize) {
         if (!url) return fallbackValue || [];
@@ -140,7 +144,7 @@ function heatmap(content) {
         const level = count === 0 ? 0 : count < 3 ? 1 : count < 7 ? 2 : count < 12 ? 3 : 4;
         const sourceLabel = source === 'both' ? `${githubLabel} and ${gitlabLabel}` : source === 'github' ? githubLabel : gitlabLabel;
         const label = `${date}: ${count} contribution${count === 1 ? '' : 's'}${source === 'none' ? '' : ` from ${sourceLabel}`}`;
-        cells.push(`<span class="contribution-day contribution-day--${source} contribution-day--level-${level}" title="${escapeHtml(label)}" aria-label="${escapeHtml(label)}"></span>`);
+        cells.push(`<span class="contribution-day contribution-day--${source} contribution-day--level-${level}" data-date="${date}" title="${escapeHtml(label)}" aria-label="${escapeHtml(label)}"></span>`);
     }
     const weeks = [];
     for (let index = 0; index < cells.length; index += 7) {
@@ -177,6 +181,10 @@ export function render({ content, ctx }) {
         { id: 'github', label: githubLabel, url: githubProvider.contributionsFile ? ctx.asset(githubProvider.contributionsFile) : githubUrl },
         { id: 'gitlab', label: gitlabLabel, url: gitlabProvider.contributionsFile ? ctx.asset(gitlabProvider.contributionsFile) : (gitlabProvider.contributionsUrl || '') },
     ];
+    const runtimeConfig = {
+        contributions: runtimeSources,
+        gists: { url: githubGistUrl(content), limit: content.sources?.gists?.limit || 6 },
+    };
     return { html: `<section id="git-contributions" class="section" aria-label="Code and contributions">
     <div class="wrap">
         <div class="section-head"><div><span class="eyebrow">${escapeHtml(content.eyebrow || '')}</span><h2>${escapeHtml(content.heading)}</h2></div><span class="section-head__note" data-note>${escapeHtml(content.note || '')}</span></div>
@@ -190,11 +198,11 @@ export function render({ content, ctx }) {
                         <div class="contribution-scroll" tabindex="0" aria-label="Contribution calendar, scroll horizontally"><div class="contribution-chart" role="group">${heatmap(content)}</div></div>
                     </div>
                 </div>
-                <script type="application/json" data-contribution-sources>${jsonForHtml(runtimeSources)}</script>
+                <script type="application/json" data-contribution-sources>${jsonForHtml(runtimeConfig)}</script>
                 <div class="terminal__prompt"><span>$</span> ls ~/projects</div>
                 <div class="repo-grid">${(content.repos || []).map((repo) => repoCard(repo, ctx)).join('')}</div>
                 <div class="terminal__prompt"><span>$</span> gh gist list</div>
-                <div class="gist-list">${gists.map(gistPill).join('')}</div>
+                <div class="gist-list" data-gist-list>${gists.map(gistPill).join('')}</div>
             </div>
         </div>
     </div>

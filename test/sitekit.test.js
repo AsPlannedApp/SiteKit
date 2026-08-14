@@ -257,7 +257,7 @@ test('git adapters normalize common provider shapes', () => {
     assert.equal(usernameFromProfile('https://github.com/octocat/'), 'octocat');
     assert.deepEqual(normalizeDays({ contributions: [{ date: '2026-01-01', count: 4, level: 2 }] }), [{ date: '2026-01-01', count: 4 }]);
     assert.deepEqual(normalizeDays({ '2026-01-02': 3 }), [{ date: '2026-01-02', count: 3 }]);
-    assert.deepEqual(normalizeGists([{ description: 'Snippet', html_url: 'https://gist.test/1', files: { a: { language: 'JavaScript' } } }], 2), [
+    assert.deepEqual(normalizeGists([{ description: 'Snippet', url: 'https://api.gist.test/1', html_url: 'https://gist.test/1', files: { a: { language: 'JavaScript' } } }], 2), [
         { title: 'Snippet', url: 'https://gist.test/1', language: 'JavaScript' },
     ]);
 });
@@ -287,6 +287,10 @@ test('git contribution calendar renders inside its responsive centering wrapper'
     assert.match(rendered.html, /class="contribution-scroll"[^>]*tabindex="0"/);
     assert.match(rendered.html, /Work &lt;Git&gt;/);
     assert.match(rendered.html, /data-contribution-sources/);
+    assert.match(rendered.html, /data-date="\d{4}-\d{2}-\d{2}"/);
+    assert.match(rendered.html, /"contributions":\[/);
+    assert.match(rendered.html, /"gists":\{/);
+    assert.match(rendered.html, /data-gist-list/);
     assert.match(rendered.html, /assets\/git-contributions\/contribution\.json/);
     assert.deepEqual([...ctx.referencedAssets], ['contribution.json']);
 });

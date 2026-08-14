@@ -32,7 +32,7 @@ For GitHub, a public profile URL can supply both the contribution and gist endpo
 
 `repos` contains the project cards you want to feature. Each one has a `title`, `description`, and `url`, plus optional `language` and `coverImage` fields.
 
-`fallback.github`, `fallback.gitlab`, and `fallback.gists` keep each part useful if its source is unavailable. They work independently, so one failed service does not hide the others.
+`fallback.github`, `fallback.gitlab`, and `fallback.gists` keep each part useful if its source is unavailable. SiteKit resolves them during generation, then refreshes public sources in the browser. A failed browser refresh leaves the generated calendar or gist list untouched.
 
 Contribution data can be a date-to-count object:
 
