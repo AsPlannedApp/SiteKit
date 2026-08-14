@@ -55,3 +55,20 @@ export function resolveThemeColorValue(value, mergedColors) {
         `"${raw}" is neither a CSS color literal (hex/rgb/hsl/color-mix) nor a known theme token alias.`
     );
 }
+
+/** Resolve a theme token chain to a concrete color for generated raster assets. */
+export function resolveThemeColorLiteral(value, mergedColors, fallback) {
+    let current = String(value || '').trim();
+    const seen = new Set();
+
+    for (let depth = 0; depth < 20; depth += 1) {
+        const variable = current.match(/^var\(\s*(--[\w-]+)\s*\)$/);
+        if (!variable) return CSS_COLOR_LITERAL.test(current) && !current.startsWith('color-mix(') ? current : fallback;
+        const name = variable[1];
+        if (seen.has(name) || !Object.prototype.hasOwnProperty.call(mergedColors, name)) return fallback;
+        seen.add(name);
+        current = String(mergedColors[name]).trim();
+    }
+
+    return fallback;
+}

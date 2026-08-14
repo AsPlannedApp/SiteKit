@@ -1,26 +1,24 @@
 {
   "identity": {
-    "name": "John Smith",
+    "name": "Alex Morgan",
+    "shortName": "Alex",
     "tagline": "Software Developer"
   },
   "seo": {
-    "title": "John Smith",
-    "description": "Software Developer"
+    "title": "Alex Morgan — Software Developer",
+    "description": "Personal website and project portfolio for Alex Morgan.",
+    "canonicalUrl": "https://example.com/"
   },
   "modules": {
-    "enabled": [
-      "dark-mode",
-      "youtube",
-      "press",
-      "learning"
-    ],
     "order": [
-      "dark-mode",
+      "blog",
+      "git-contributions",
+      "photo-album",
+      "job-history",
       "youtube",
       "press",
       "learning"
     ],
-    "mode": {},
     "overrides": {
       "learning": {
         "colors": {
@@ -32,6 +30,12 @@
   "theme": {
     "preset": "asplanned",
     "overrides": {}
+  },
+  "extensions": {
+    "dark-mode": true,
+    "og-meta": true,
+    "favicon": true,
+    "app-icon": true
   },
   "links": {}
 }

@@ -145,9 +145,8 @@ vite.config.ts.timestamp-*
 # Assets shouldn't be committed
 assets/*
 
-# WIP modules
-modules/press
-modules/press/*
-
 # Ignore Claude Plan
 PLAN.md
+
+.DS_Store
+**/.DS_Store

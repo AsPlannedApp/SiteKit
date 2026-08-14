@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>Example Development Feed</title>
+    <item>
+      <title><![CDATA[A useful RSS post]]></title>
+      <link>https://example.test/posts/rss-first</link>
+      <pubDate>Thu, 13 Aug 2026 10:00:00 GMT</pubDate>
+      <description><![CDATA[A concise <strong>RSS fixture</strong> excerpt.]]></description>
+      <content:encoded><![CDATA[<p>Longer article content.</p><img src="https://images.example.test/rss-first.webp">]]></content:encoded>
+      <enclosure url="http://images.example.test/enclosure.jpg" type="image/jpeg" />
+    </item>
+    <item>
+      <title>Media thumbnail post</title>
+      <link>https://example.test/posts/rss-second</link>
+      <description>Second fixture.</description>
+      <media:thumbnail url="http://images.example.test/rss-second.jpg" />
+    </item>
+  </channel>
+</rss>

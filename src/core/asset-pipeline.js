@@ -39,6 +39,40 @@ export function copyModuleAssets(loadedModules, outputRoot) {
     return copied;
 }
 
+/** Remove generated output belonging to discovered modules that are inactive. */
+export function removeInactiveModuleAssets(manifests, activeIds, outputRoot) {
+    const active = new Set(activeIds);
+    const removed = [];
+    for (const id of manifests.keys()) {
+        if (active.has(id)) continue;
+        const dest = path.join(outputRoot, 'assets', id);
+        if (!existsSync(dest)) continue;
+        rmSync(dest, { recursive: true, force: true });
+        removed.push(id);
+    }
+    return removed;
+}
+
+/** Run optional module-owned derived-asset builders after authored assets copy. */
+export async function generateModuleAssets(loadedModules, outputRoot, config = {}, buildContext = {}) {
+    const generated = [];
+    for (const mod of loadedModules) {
+        if (typeof mod.template?.generateAssets !== 'function') continue;
+        const outputDir = path.join(outputRoot, 'assets', mod.id);
+        mkdirSync(outputDir, { recursive: true });
+        await mod.template.generateAssets({
+            content: mod.content,
+            config,
+            ctx: mod.ctx,
+            moduleDir: mod.dir,
+            outputDir,
+            ...buildContext,
+        });
+        generated.push(mod.id);
+    }
+    return generated;
+}
+
 /**
  * Copies a self-hosted theme's own font files (themes/<preset>/fonts/**) to
  * <outputRoot>/assets/theme-fonts/**, mirroring copyModuleAssets()'s

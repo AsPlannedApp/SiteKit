@@ -2,13 +2,14 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 
 import { validateConfig } from '../core/config-schema.js';
-import { discoverModules, loadModule, resolveActiveModuleIds } from '../core/module-loader.js';
+import { discoverModules, loadModule, prepareModules, resolveActiveModuleIds, validateModuleConfiguration } from '../core/module-loader.js';
 import { loadThemeTokens, buildThemeCss } from '../core/theme-tokens.js';
 import { buildFontTags } from '../core/font-tags.js';
 import { renderAll } from '../core/render-pipeline.js';
 import { buildDocument, GENERATED_MARKER_PREFIX } from '../core/html-shell.js';
-import { copyModuleAssets, copyThemeFonts } from '../core/asset-pipeline.js';
+import { copyModuleAssets, copyThemeFonts, generateModuleAssets, removeInactiveModuleAssets } from '../core/asset-pipeline.js';
 import { buildIconSubset } from '../core/icon-subset.js';
+import { throwForProblems, validateGeneratedAssetContracts, validateModuleContent, validateReferencedAssets } from '../core/content-validation.js';
 
 const ROOT = process.cwd();
 const VERSION = JSON.parse(readFileSync(path.join(ROOT, 'package.json'), 'utf8')).version;
@@ -20,10 +21,11 @@ export async function run({ force = false } = {}) {
 
     const modulesRoot = path.join(ROOT, 'modules');
     const manifests = discoverModules(modulesRoot);
+    validateModuleConfiguration(manifests, config);
 
     // "infra"/"chrome" modules (core-assets, header, hero, footer) are always
     // included when present -- they aren't part of the user-selectable
-    // content-section set in config.modules.enabled. "extension" modules
+    // content-section list in config.modules.order. "extension" modules
     // (favicon/app-icon, og-meta, dark-mode, ...) follow the same
     // present-on-disk-means-active rule, but can be individually opted out
     // via config.extensions.<id> = false (e.g. once favicon generation is
@@ -34,6 +36,11 @@ export async function run({ force = false } = {}) {
     for (const id of idsToLoad) {
         loaded.push(await loadModule(manifests.get(id)));
     }
+
+    throwForProblems(validateModuleContent(loaded));
+
+    const preparationWarnings = await prepareModules(loaded, config);
+    preparationWarnings.forEach((warning) => console.warn(`Warning: ${warning}`));
 
     const tokens = loadThemeTokens(path.join(ROOT, 'themes'), config.theme.preset);
     const themeOverrides = config.theme.overrides || {};
@@ -55,6 +62,7 @@ export async function run({ force = false } = {}) {
     const { rendered, styleText, scriptText, globalsCss } = renderAll(loaded, config, {
         themeColors: mergedThemeColors,
     });
+    throwForProblems(validateReferencedAssets(loaded));
 
     const html = buildDocument({
         config,
@@ -78,7 +86,10 @@ export async function run({ force = false } = {}) {
     }
     writeFileSync(outputPath, html);
 
+    const removedAssetModules = removeInactiveModuleAssets(manifests, idsToLoad, ROOT);
     const copiedAssetModules = copyModuleAssets(loaded, ROOT);
+    const generatedAssetModules = await generateModuleAssets(loaded, ROOT, config, { themeColors: mergedThemeColors });
+    throwForProblems(validateGeneratedAssetContracts(loaded, { requireFiles: true }));
 
     // Tabler icon subsetting runs AFTER copyModuleAssets (which already
     // skipped the vendored full font/map via core-assets' assetsExclude --
@@ -101,5 +112,7 @@ export async function run({ force = false } = {}) {
     console.log(`Generated ${outputPath}`);
     console.log(`Modules rendered: ${rendered.map((r) => r.id).join(', ') || '(none)'}`);
     console.log(`Assets copied for: ${copiedAssetModules.join(', ') || '(none)'}`);
+    console.log(`Assets generated for: ${generatedAssetModules.join(', ') || '(none)'}`);
+    if (removedAssetModules.length) console.log(`Stale assets removed for: ${removedAssetModules.join(', ')}`);
     console.log(`Tabler icon subset: ${iconSubsetInfo}`);
 }

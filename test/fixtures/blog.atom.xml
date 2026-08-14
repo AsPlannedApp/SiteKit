@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Fixture Blog</title>
+  <entry>
+    <title>A useful first post</title>
+    <link rel="alternate" href="https://example.test/posts/first" />
+    <published>2026-07-12T09:00:00Z</published>
+    <content type="html"><![CDATA[<p>A concise <strong>fixture</strong> excerpt.</p><img src="https://images.example.test/first.webp">]]></content>
+  </entry>
+  <entry>
+    <title>Second post</title>
+    <link href="https://example.test/posts/second" />
+    <updated>2026-07-01T09:00:00Z</updated>
+    <summary>Plain summary text.</summary>
+  </entry>
+</feed>

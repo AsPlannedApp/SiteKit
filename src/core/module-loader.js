@@ -30,11 +30,39 @@ export function resolveActiveModuleIds(manifests, config) {
         if (!manifests.has(id)) {
             throw new Error(`config.modules.order references unknown module "${id}" (no modules/${id}/module.json found).`);
         }
+        if (manifests.get(id).kind !== 'content-section') {
+            throw new Error(`config.modules.order may only contain content-section modules; "${id}" is ${manifests.get(id).kind}.`);
+        }
         if (ids.includes(id)) continue;
         ids.push(id);
     }
 
     return ids;
+}
+
+export function validateModuleConfiguration(manifests, config) {
+    const problems = [];
+
+    for (const [id, enabled] of Object.entries(config.extensions || {})) {
+        const manifest = manifests.get(id);
+        if (!manifest) problems.push(`config.extensions references unknown module "${id}".`);
+        else if (manifest.kind !== 'extension') problems.push(`config.extensions.${id} targets a ${manifest.kind} module, not an extension.`);
+        if (typeof enabled !== 'boolean') problems.push(`config.extensions.${id} must be boolean.`);
+    }
+
+    for (const [id, override] of Object.entries(config.modules?.overrides || {})) {
+        const manifest = manifests.get(id);
+        if (!manifest) {
+            problems.push(`config.modules.overrides references unknown module "${id}".`);
+            continue;
+        }
+        const allowedSlots = new Set(manifest.themable || []);
+        for (const slot of Object.keys(override?.colors || {})) {
+            if (!allowedSlots.has(slot)) problems.push(`config.modules.overrides.${id}.colors.${slot} is not declared in modules/${id}/module.json.`);
+        }
+    }
+
+    if (problems.length) throw new Error(`Invalid module configuration:\n  - ${problems.join('\n  - ')}`);
 }
 
 /**
@@ -76,12 +104,41 @@ export function discoverModules(modulesRoot) {
  * root and 404) or served over HTTP at a domain root.
  */
 export function buildAssetCtx(id) {
+    const referencedAssets = new Set();
+    const referencedGeneratedAssets = new Set();
+    const cleanAssetPath = (relPath) => {
+        const clean = String(relPath).replace(/^\/+/, '');
+        if (!clean || clean.split('/').includes('..')) throw new Error(`modules/${id}/ requested unsafe asset path "${relPath}".`);
+        return clean;
+    };
     return {
+        referencedAssets,
+        referencedGeneratedAssets,
         asset(relPath) {
-            const clean = String(relPath).replace(/^\/+/, '');
+            const clean = cleanAssetPath(relPath);
+            referencedAssets.add(clean);
+            return `assets/${id}/${clean}`;
+        },
+        generatedAsset(relPath) {
+            const clean = cleanAssetPath(relPath);
+            referencedGeneratedAssets.add(clean);
             return `assets/${id}/${clean}`;
         },
     };
+}
+
+/** Resolve optional build-time data before summaries and rendering. */
+export async function prepareModules(loadedModules, config, { fetchImpl = globalThis.fetch } = {}) {
+    const warnings = [];
+
+    for (const mod of loadedModules) {
+        if (!mod.template || typeof mod.template.prepare !== 'function') continue;
+        const result = await mod.template.prepare({ content: mod.content, config, ctx: mod.ctx, fetch: fetchImpl, moduleDir: mod.dir });
+        if (result?.content !== undefined) mod.content = result.content;
+        if (Array.isArray(result?.warnings)) warnings.push(...result.warnings.map((message) => `${mod.id}: ${message}`));
+    }
+
+    return warnings;
 }
 
 /**
