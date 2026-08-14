@@ -55,7 +55,7 @@ test('theme-sensitive controls preserve contrast and authored badge dimensions',
     const footerCss = readFileSync(path.resolve('modules/footer/styles.css'), 'utf8');
     assert.match(pressCss, /\.dl-dropdown \.dl-menu a \{[\s\S]*color: var\(--bg-page\)/);
     const footerBadgeRule = footerCss.match(/\.site-footer__badge img \{([^}]*)\}/)?.[1] || '';
-    assert.doesNotMatch(footerBadgeRule, /(?:width|height):/);
+    assert.doesNotMatch(footerBadgeRule, /(?:^|\n)\s*(?:width|height):/);
     assert.match(footerBadgeRule, /max-width: 100%/);
 });
 
