@@ -1,0 +1,30 @@
+{
+  "eyebrow": "Snapshots",
+  "heading": "Photo Album",
+  "note": "Small moments worth keeping",
+  "columns": 5,
+  "photos": [
+    {
+      "file": "photos/coastal-window.png",
+      "label": "Sea air",
+      "alt": "An open coastal window looking toward a calm blue sea"
+    }, {
+      "file": "photos/city-bicycle.png",
+      "label": "Slow streets",
+      "alt": "A bicycle resting beside an old sunlit city wall"
+    }, {
+      "file": "photos/mountain-picnic.png",
+      "label": "Lunch with a view",
+      "alt": "A simple picnic overlooking a green mountain valley"
+    },
+    {
+      "file": "photos/train-window.png",
+      "label": "Somewhere north",
+      "alt": "Countryside passing by outside a train window"
+    }, {
+      "file": "photos/corner-cafe.png",
+      "label": "One more coffee",
+      "alt": "A quiet corner table in a warm neighborhood cafe"
+    }
+  ]
+}

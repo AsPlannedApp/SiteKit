@@ -1,0 +1,11 @@
+{
+  "id": "photo-album",
+  "kind": "content-section",
+  "navLabel": "Photos",
+  "navIcon": "ti-photo",
+  "anchor": "photo-album",
+  "contentSchema": "./content.schema.json",
+  "template": "./template.js",
+  "styles": "./styles.css",
+  "client": "./client.js"
+}
