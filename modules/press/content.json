@@ -1,0 +1,64 @@
+{
+  "eyebrow": "Archive",
+  "heading": "In the Media",
+  "note": "Fictional sample publications",
+  "panelLabel": "The Sample Newsstand",
+  "countOverride": "6",
+  "magazines": [
+    {
+      "title": "Signal & Syntax",
+      "flag": "🌐",
+      "dateLabel": "2026/06",
+      "role": "Feature",
+      "coverImage": "magazines/signal-syntax.webp",
+      "action": { "type": "single", "href": "https://example.com/magazines/signal-and-syntax", "label": "Read sample" }
+    },
+    {
+      "title": "Runtime",
+      "flag": "🌐",
+      "dateLabel": "2026/05",
+      "role": "Feature",
+      "coverImage": "magazines/runtime.webp",
+      "action": { "type": "single", "href": "https://example.com/magazines/runtime", "label": "Read sample" }
+    },
+    {
+      "title": "Open Circuit",
+      "flag": "🌐",
+      "dateLabel": "2026/04",
+      "role": "Feature",
+      "coverImage": "magazines/open-circuit.webp",
+      "action": { "type": "single", "href": "https://example.com/magazines/open-circuit", "label": "Read sample" }
+    },
+    {
+      "title": "Kernel & Craft",
+      "flag": "🌐",
+      "dateLabel": "2026/03",
+      "role": "Feature",
+      "coverImage": "magazines/kernel-craft.webp",
+      "action": { "type": "single", "href": "https://example.com/magazines/kernel-and-craft", "label": "Read sample" }
+    },
+    {
+      "title": "Interface Quarterly",
+      "flag": "🌐",
+      "dateLabel": "2026/Q1",
+      "role": "Feature",
+      "coverImage": "magazines/interface-quarterly.webp",
+      "action": { "type": "single", "href": "https://example.com/magazines/interface-quarterly", "label": "Read sample" }
+    },
+    {
+      "title": "Static!",
+      "flag": "🌐",
+      "dateLabel": "2025/12",
+      "role": "Feature",
+      "coverImage": "magazines/static.webp",
+      "action": { "type": "single", "href": "https://example.com/magazines/static", "label": "Read sample" }
+    }
+  ],
+  "tutorialsLabel": "Tutorials",
+  "tutorials": [
+    { "title": "Build a Personal Site", "note": "A practical SiteKit introduction", "href": "https://example.com/tutorials/build-a-personal-site", "image": "tutorials/build-site.webp" },
+    { "title": "Design a Theme", "note": "Colors, type, and dark mode", "href": "https://example.com/tutorials/design-a-theme", "image": "tutorials/design-theme.webp" },
+    { "title": "Publish an Atom Feed", "note": "Static posts with a resilient fallback", "href": "https://example.com/tutorials/publish-an-atom-feed", "image": "tutorials/atom-feed.webp" },
+    { "title": "Read Git Activity", "note": "Contributions, repositories, and gists", "href": "https://example.com/tutorials/read-git-activity", "image": "tutorials/git-activity.webp" }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "press content",
+  "type": "object",
+  "properties": {
+    "eyebrow": { "type": "string" },
+    "heading": { "type": "string" },
+    "note": { "type": "string" },
+    "panelLabel": { "type": "string" },
+    "countOverride": { "description": "press's real count is usually a rounded '100+' style figure, not derivable from a handful of scaffolding entries -- set this explicitly." },
+    "magazines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "flag", "dateLabel", "role", "coverImage", "action"],
+        "properties": {
+          "title": { "type": "string" },
+          "flag": { "type": "string", "description": "Flag emoji shown next to the title." },
+          "dateLabel": { "type": "string", "description": "e.g. '2007/06'" },
+          "role": { "type": "string", "description": "e.g. 'Author', 'Contributor'" },
+          "coverImage": { "type": "string", "description": "Module-relative path, resolved via ctx.asset()." },
+          "coverSquare": { "type": "boolean", "description": "Disc/CD-cover variant: square image, no paper drop-shadow." },
+          "action": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": ["type", "href", "label"],
+                "properties": {
+                  "type": { "const": "single" },
+                  "href": { "type": "string", "description": "External URL, or a module-relative asset path." },
+                  "label": { "type": "string" }
+                }
+              },
+              {
+                "type": "object",
+                "required": ["type", "items"],
+                "properties": {
+                  "type": { "const": "dropdown" },
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": {
+                      "type": "object",
+                      "required": ["label", "href"],
+                      "properties": {
+                        "label": { "type": "string" },
+                        "href": { "type": "string", "description": "External URL, or a module-relative asset path." }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "tutorialsLabel": { "type": "string" },
+    "tutorials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "note", "href", "image"],
+        "properties": {
+          "title": { "type": "string" },
+          "note": { "type": "string" },
+          "href": { "type": "string" },
+          "image": { "type": "string", "description": "Module-relative path, resolved via ctx.asset()." }
+        }
+      }
+    }
+  }
+}

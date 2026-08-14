@@ -1,0 +1,10 @@
+{
+  "id": "press",
+  "kind": "content-section",
+  "navLabel": "Press",
+  "navIcon": "ti-news",
+  "anchor": "press",
+  "contentSchema": "./content.schema.json",
+  "template": "./template.js",
+  "styles": "./styles.css"
+}
