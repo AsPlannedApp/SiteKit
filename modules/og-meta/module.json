@@ -1,5 +1,6 @@
 {
   "id": "og-meta",
   "kind": "extension",
-  "template": "./template.js"
+  "template": "./template.js",
+  "generatedAssets": ["open-graph-preview.png"]
 }
