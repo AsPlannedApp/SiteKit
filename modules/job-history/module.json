@@ -1,0 +1,10 @@
+{
+  "id": "job-history",
+  "kind": "content-section",
+  "navLabel": "Work",
+  "navIcon": "ti-briefcase",
+  "anchor": "job-history",
+  "contentSchema": "./content.schema.json",
+  "template": "./template.js",
+  "styles": "./styles.css"
+}

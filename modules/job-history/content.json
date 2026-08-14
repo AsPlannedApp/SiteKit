@@ -1,0 +1,10 @@
+{
+  "eyebrow": "Experience",
+  "heading": "Job History",
+  "note": "A few chapters from the journey",
+  "entries": [
+    { "period": "2024 — Present", "role": "Lead Software Engineer", "company": "Northstar Studio", "location": "Remote", "paragraphs": ["Leading a small product team building dependable tools for independent businesses.", "Focused on clear architecture, useful feedback loops, and making complex systems feel approachable."], "links": [{ "label": "Company", "url": "https://example.com/companies/northstar-studio" }] },
+    { "period": "2021 — 2024", "role": "Senior Software Engineer", "company": "Field Notes Labs", "location": "Berlin", "paragraphs": ["Built web platforms and APIs used by distributed editorial teams.", "Helped simplify delivery practices and mentored engineers across product groups."] },
+    { "period": "2018 — 2021", "role": "Software Developer", "company": "Common Thread", "location": "Amsterdam", "paragraphs": ["Worked across frontend and backend systems for a growing digital studio.", "Learned to value small releases, honest documentation, and resilient interfaces."] }
+  ]
+}
