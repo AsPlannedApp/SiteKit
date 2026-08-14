@@ -54,7 +54,9 @@ test('theme-sensitive controls preserve contrast and authored badge dimensions',
     const pressCss = readFileSync(path.resolve('modules/press/styles.css'), 'utf8');
     const footerCss = readFileSync(path.resolve('modules/footer/styles.css'), 'utf8');
     assert.match(pressCss, /\.dl-dropdown \.dl-menu a \{[\s\S]*color: var\(--bg-page\)/);
-    assert.match(footerCss, /\.site-footer__badge img \{[\s\S]*width: auto;[\s\S]*height: auto;/);
+    const footerBadgeRule = footerCss.match(/\.site-footer__badge img \{([^}]*)\}/)?.[1] || '';
+    assert.doesNotMatch(footerBadgeRule, /(?:width|height):/);
+    assert.match(footerBadgeRule, /max-width: 100%/);
 });
 
 test('Open Graph metadata uses generated defaults and preserves authored overrides', () => {
