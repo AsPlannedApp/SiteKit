@@ -1,0 +1,7 @@
+{
+  "id": "favicon",
+  "kind": "extension",
+  "template": "./template.js",
+  "assetsExclude": ["favicon-source.png"],
+  "generatedAssets": ["favicon-16.png", "favicon-32.png", "favicon-48.png"]
+}
