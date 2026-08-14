@@ -1,19 +1,19 @@
 {
   "eyebrow": "Colophon",
   "heading": "Certifications & Trainings",
-  "note": "Technical certifications and completed courses",
-  "panelLabel": "The Trophy Case",
+  "note": "Realistic fictional credentials for the SiteKit demo",
+  "panelLabel": "Sample Credentials",
   "panelNote": "3 certifications · 4 courses",
   "miniBadgesLabel": "Also completed",
   "badges": [
-    { "image": "badges/nvidia.webp", "title": "Fundamentals of Deep Learning", "issuer": "NVIDIA" },
-    { "image": "badges/confluent-admin.webp", "title": "Apache Kafka Administrator", "issuer": "Confluent" },
-    { "image": "badges/confluent-developer.webp", "title": "Apache Kafka Developer", "issuer": "Confluent" }
+    { "image": "badges/accessible-web.webp", "title": "Accessible Web Professional", "issuer": "Inclusive Interface Guild" },
+    { "image": "badges/cloud-systems.webp", "title": "Cloud Systems Practitioner", "issuer": "Northstar Technology Institute" },
+    { "image": "badges/web-performance.webp", "title": "Web Performance Specialist", "issuer": "Open Web Academy" }
   ],
   "miniBadges": [
-    { "icon": "ti-terminal-2", "label": "Claude Code in Action", "issuer": "Claude" },
-    { "icon": "ti-message-chatbot", "label": "Google AI Essentials", "issuer": "Google" },
-    { "icon": "ti-brand-vscode", "label": "Introduction to agent-first development", "issuer": "VS Code" },
-    { "icon": "ti-brand-typescript", "label": "Build TypeScript applications", "issuer": "Microsoft" }
+    { "icon": "ti-code", "label": "Practical TypeScript Patterns", "issuer": "Northstar Technology Institute" },
+    { "icon": "ti-activity-heartbeat", "label": "Observability for Web Services", "issuer": "Systems Craft School" },
+    { "icon": "ti-api", "label": "Designing Resilient APIs", "issuer": "Systems Craft School" },
+    { "icon": "ti-shield-check", "label": "Secure Delivery Pipelines", "issuer": "Open Web Academy" }
   ]
 }

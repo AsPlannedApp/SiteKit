@@ -4,7 +4,7 @@ import { escapeHtml } from '../../src/core/html-util.js';
  * modules/learning/template.js
  */
 
-export function summary(content) {
+export function summary({ content }) {
     const badges = content.badges || [];
     return { label: 'Certifications', count: badges.length };
 }
@@ -13,7 +13,7 @@ function renderBadge(badge, ctx) {
     const title = `${escapeHtml(badge.issuer)}: ${escapeHtml(badge.title)}`;
     return `
                 <div class="credential-badge" role="group" title="${title}" aria-label="${title}">
-                    <div class="credential-badge__medallion"><img src="${ctx.asset(badge.image)}" alt="${escapeHtml(badge.issuer)} Logo" loading="lazy"></div>
+                    <div class="credential-badge__medallion"><img src="${ctx.asset(badge.image)}" alt="${escapeHtml(badge.title)} badge" loading="lazy"></div>
                     <h3>${escapeHtml(badge.title)}</h3>
                     <span class="credential-badge__issuer" data-issuer>${escapeHtml(badge.issuer)}</span>
                 </div>`;
@@ -29,7 +29,7 @@ function renderMiniBadge(badge) {
                 </div>`;
 }
 
-export function render(content, config, mode, ctx) {
+export function render({ content, ctx }) {
     const badges = (content.badges || []).map((b) => renderBadge(b, ctx)).join('');
     const miniBadges = (content.miniBadges || []).map(renderMiniBadge).join('');
 
