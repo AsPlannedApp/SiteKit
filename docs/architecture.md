@@ -158,7 +158,7 @@ With a GitHub profile and no explicit contribution source, SiteKit uses the publ
 
 Every contribution source accepts either an array of `{ "date": "YYYY-MM-DD", "count": 4 }` objects or a date-to-count object. `label` controls the provider name shown in the legend and accessible day descriptions. Fallback data has the same normalized shape.
 
-Remote data is not written back to `content.json`; it exists only in the generated result. Contribution files are copied to the generated module assets and their labeled source descriptors are embedded in the page, establishing the data contract for a future browser-side refresh. Browser-side Git refresh and authenticated provider adapters are not implemented yet.
+Remote data is not written back to `content.json`; it exists only in the generated result. Contribution files are copied to the generated module assets. The generated page also refreshes configured contribution and gist sources after load; if a browser request fails, the generated content remains visible. Authenticated provider adapters are not implemented.
 
 ## Rendering and styles
 
@@ -173,4 +173,4 @@ Module CSS should consume semantic theme aliases such as `--bg-page`, `--bg-pane
 
 Use `escapeHtml()` for authored text and `resolveHref()` when a field may be either an external URL or a module-relative asset.
 
-Client scripts should contain only behavior that must run in the browser. Data fetching belongs in `prepare()` for the current static-first release.
+Client scripts should contain only behavior that must run in the browser. Fetch remote data in `prepare()` first so generated output remains complete; browser refreshes may progressively replace it when fresher public data is available.

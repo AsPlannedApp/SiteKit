@@ -64,7 +64,7 @@ Optional finishing touches live under `extensions`:
 
 ## A little more detail
 
-Blog and contribution sources are fetched while SiteKit generates the page, so visitors do not have to wait for them. If a source is unavailable, SiteKit keeps going and uses the saved content in that module's `content.json`. Leave a source URL empty when you prefer fully authored content.
+Blog and contribution sources are fetched while SiteKit generates the page, so visitors immediately receive complete content. The browser then refreshes public blog, contribution, and gist sources when possible. If any source is unavailable, SiteKit keeps the generated or saved fallback content visible. Leave a source URL empty when you prefer fully authored content.
 
 The most useful commands are:
 
