@@ -7,10 +7,11 @@ import test from 'node:test';
 import sharp from 'sharp';
 
 import { validateConfig } from '../src/core/config-schema.js';
+import { buildDocument } from '../src/core/html-shell.js';
 import { removeInactiveModuleAssets } from '../src/core/asset-pipeline.js';
 import { buildAssetCtx, resolveActiveModuleIds, validateModuleConfiguration } from '../src/core/module-loader.js';
 import { validateGeneratedAssetContracts, validateModuleContent } from '../src/core/content-validation.js';
-import { atomPosts, feedPosts, prepare as prepareBlog, render as renderBlog, resolveFeedUrl } from '../modules/blog/template.js';
+import { atomPosts, contentfulImageUrl, feedPosts, prepare as prepareBlog, render as renderBlog, resolveFeedUrl } from '../modules/blog/template.js';
 import { gistLangMeta, normalizeDays, normalizeGists, prepare as prepareGit, render as renderGit, usernameFromProfile } from '../modules/git-contributions/template.js';
 import { render as renderHeader } from '../modules/header/template.js';
 import { generateAssets as generatePhotoAssets, previewPath, previewWidths } from '../modules/photo-album/template.js';
@@ -31,6 +32,19 @@ test('configuration uses one ordered module list', () => {
     assert.throws(() => validateConfig({ ...baseConfig, modules: { order: ['example', 'example'] } }), /duplicate ids/);
     assert.throws(() => validateConfig({ ...baseConfig, seo: { canonicalUrl: '/relative' } }), /absolute HTTP/);
     assert.throws(() => validateConfig({ ...baseConfig, identity: { name: 'Test', shortName: '' } }), /shortName/);
+});
+
+test('generated document marker is valid inside an HTML comment', () => {
+    const html = buildDocument({
+        config: baseConfig,
+        version: '0.1.0',
+        themeCss: '',
+        styleText: '',
+        scriptText: '',
+        rendered: [],
+    });
+    assert.match(html, /generated-by:sitekit@0\.1\.0; do not hand-edit/);
+    assert.doesNotMatch(html, /sitekit@0\.1\.0 --/);
 });
 
 test('header navigation keeps an accessible name when labels collapse to icons', () => {
@@ -262,6 +276,24 @@ test('blog renders baked posts with safe runtime refresh configuration', () => {
     assert.doesNotMatch(rendered.html, /<unsafe>/);
 });
 
+test('blog renders accessible responsive Contentful images without rewriting other hosts', () => {
+    const source = 'https://images.ctfassets.net/space/asset/hash/hero.png';
+    assert.match(contentfulImageUrl(source, 800), /fm=webp/);
+    assert.match(contentfulImageUrl(source, 800), /w=800/);
+    assert.equal(contentfulImageUrl('https://example.test/hero.png', 800), '');
+
+    const rendered = renderBlog({
+        content: {
+            heading: 'Blog',
+            sourceStatus: 'authored',
+            fallback: [{ title: 'An accessible post', url: 'https://example.test/post', image: source }],
+        },
+    });
+    assert.match(rendered.html, /aria-label="Read An accessible post"/);
+    assert.match(rendered.html, /srcset="[^"]+480w[^"]+800w[^"]+1200w"/);
+    assert.match(rendered.html, /sizes="\(max-width: 760px\)/);
+});
+
 test('git adapters normalize common provider shapes', () => {
     assert.equal(usernameFromProfile('https://github.com/octocat/'), 'octocat');
     assert.deepEqual(normalizeDays({ contributions: [{ date: '2026-01-01', count: 4, level: 2 }] }), [{ date: '2026-01-01', count: 4 }]);
@@ -293,15 +325,18 @@ test('git contribution calendar renders inside its responsive centering wrapper'
         ctx,
     });
     assert.match(rendered.html, /<div class="chart-card-wrap">\s*<div class="contribution-panel">/);
-    assert.match(rendered.html, /class="contribution-scroll"[^>]*tabindex="0"/);
+    assert.match(rendered.html, /class="contribution-scroll"[^>]*role="region"[^>]*tabindex="0"/);
     assert.match(rendered.html, /Work &lt;Git&gt;/);
     assert.match(rendered.html, /data-contribution-sources/);
     assert.match(rendered.html, /data-date="\d{4}-\d{2}-\d{2}"/);
+    assert.match(rendered.html, /class="contribution-day[^"]*" role="img"/);
     assert.match(rendered.html, /"contributions":\[/);
     assert.match(rendered.html, /"gists":\{/);
     assert.match(rendered.html, /data-gist-list/);
     assert.match(rendered.html, /assets\/git-contributions\/contribution\.json/);
     assert.deepEqual([...ctx.referencedAssets], ['contribution.json']);
+    const styles = readFileSync(path.resolve('modules/git-contributions/styles.css'), 'utf8');
+    assert.match(styles, /--empty: color-mix\(in srgb, var\(--fg-body\) 12%, var\(--bg-panel\)\)/);
 });
 
 test('git preparation reads a labeled module-relative contribution file', async (t) => {

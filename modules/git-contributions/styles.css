@@ -9,7 +9,7 @@
 .terminal__prompt > span { color: var(--brand-light); }
 
 .chart-card-wrap { display: flex; justify-content: center; width: 100%; min-width: 0; max-width: 100%; }
-.contribution-panel { --empty: #eef2f2; --github: #2ba193; --gitlab: #5a94b2; --both: #e8895d; width: 668px; min-width: 0; max-width: 100%; min-height: 167px; background: var(--bg-panel); color: var(--fg-body); border-radius: 8px; padding: 1rem; }
+.contribution-panel { --empty: color-mix(in srgb, var(--fg-body) 12%, var(--bg-panel)); --github: #2ba193; --gitlab: #5a94b2; --both: #e8895d; width: 668px; min-width: 0; max-width: 100%; min-height: 167px; background: var(--bg-panel); color: var(--fg-body); border-radius: 8px; padding: 1rem; }
 .contribution-panel__top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 1rem; font-family: var(--font-body); }
 .contribution-legend { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
 .contribution-panel__top span { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(0,0,0,.06); border-radius: 20px; padding: 5px 10px; font-size: 12px; font-weight: 700; line-height: 1.2; }

@@ -46,6 +46,7 @@
             var sourceLabel = active.length > 1 ? active.map(function (item) { return item.label; }).join(' and ') : active[0]?.label || '';
             var label = cell.dataset.date + ': ' + count + ' contribution' + (count === 1 ? '' : 's') + (sourceLabel ? ' from ' + sourceLabel : '');
             cell.className = 'contribution-day contribution-day--' + source + ' contribution-day--level-' + contributionLevel(count);
+            cell.setAttribute('role', 'img');
             cell.title = label;
             cell.setAttribute('aria-label', label);
         });
@@ -139,5 +140,10 @@
         if (img.complete) markReady();
     });
 
-    window.addEventListener('load', refreshRuntimeSources, { once: true });
+    function refreshWhenIdle() {
+        if ('requestIdleCallback' in window) window.requestIdleCallback(refreshRuntimeSources, { timeout: 2500 });
+        else setTimeout(refreshRuntimeSources, 1500);
+    }
+
+    window.addEventListener('load', refreshWhenIdle, { once: true });
 })();

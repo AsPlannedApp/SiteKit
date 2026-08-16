@@ -102,6 +102,30 @@ function jsonForHtml(value) {
     return JSON.stringify(value).replaceAll('<', '\\u003c').replaceAll('>', '\\u003e').replaceAll('&', '\\u0026');
 }
 
+const BLOG_IMAGE_SIZES = '(max-width: 760px) calc(100vw - 2rem), (max-width: 1160px) calc((100vw - 8rem) / 3), 344px';
+const BLOG_IMAGE_WIDTHS = [480, 800, 1200];
+
+function contentfulImageUrl(value, width) {
+    try {
+        const url = new URL(value);
+        if (url.hostname !== 'images.ctfassets.net') return '';
+        url.searchParams.set('fm', 'webp');
+        url.searchParams.set('w', String(width));
+        url.searchParams.set('q', '75');
+        return url.href;
+    } catch {
+        return '';
+    }
+}
+
+function imageMarkup(post, index) {
+    const optimized = contentfulImageUrl(post.image, 800);
+    const responsive = optimized
+        ? ` srcset="${escapeHtml(BLOG_IMAGE_WIDTHS.map((width) => `${contentfulImageUrl(post.image, width)} ${width}w`).join(', '))}" sizes="${BLOG_IMAGE_SIZES}"`
+        : '';
+    return `<img src="${escapeHtml(optimized || post.image)}"${responsive} alt="" loading="${index === 0 ? 'eager' : 'lazy'}"${index === 0 ? ' fetchpriority="high"' : ''}>`;
+}
+
 export async function prepare({ content, config, fetch }) {
     const authoredUrl = content.source?.url?.trim();
     if (!authoredUrl) return { content: { ...content, posts: content.fallback, sourceStatus: 'authored' } };
@@ -138,10 +162,10 @@ export function summary({ content }) {
 
 function postCard(post, index) {
     const media = post.image
-        ? `<img src="${escapeHtml(post.image)}" alt="" loading="${index === 0 ? 'eager' : 'lazy'}"${index === 0 ? ' fetchpriority="high"' : ''}>`
+        ? imageMarkup(post, index)
         : `<i class="ti ${escapeHtml(post.icon || 'ti-writing-sign')}" aria-hidden="true"></i>`;
     return `<article class="blog-card" data-rv>
-        <a class="blog-card__thumb${post.image ? '' : ' blog-card__thumb--icon'}" href="${escapeHtml(post.url)}" target="_blank" rel="noopener noreferrer">${media}</a>
+        <a class="blog-card__thumb${post.image ? '' : ' blog-card__thumb--icon'}" href="${escapeHtml(post.url)}" target="_blank" rel="noopener noreferrer" aria-label="Read ${escapeHtml(post.title)}">${media}</a>
         ${post.date ? `<div class="blog-card__date">${escapeHtml(post.date)}</div>` : ''}
         <h3><a href="${escapeHtml(post.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(post.title)}</a></h3>
         <p>${escapeHtml(post.excerpt || '')}</p>
@@ -167,4 +191,4 @@ ${notice ? `        ${notice}\n` : ''}        <div class="blog-grid" data-blog-g
 </section>` };
 }
 
-export { atomPosts, feedPosts, resolveFeedUrl };
+export { atomPosts, contentfulImageUrl, feedPosts, resolveFeedUrl };

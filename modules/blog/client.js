@@ -49,6 +49,22 @@
         }
     }
 
+    var blogImageSizes = '(max-width: 760px) calc(100vw - 2rem), (max-width: 1160px) calc((100vw - 8rem) / 3), 344px';
+    var blogImageWidths = [480, 800, 1200];
+
+    function contentfulImageUrl(value, width) {
+        try {
+            var url = new URL(value);
+            if (url.hostname !== 'images.ctfassets.net') return '';
+            url.searchParams.set('fm', 'webp');
+            url.searchParams.set('w', String(width));
+            url.searchParams.set('q', '75');
+            return url.href;
+        } catch (error) {
+            return '';
+        }
+    }
+
     function atomPost(entry, feedUrl) {
         var links = Array.from(entry.getElementsByTagName('link'));
         var link = links.find(function (item) { return item.getAttribute('rel') === 'alternate'; }) || links[0];
@@ -109,9 +125,15 @@
             thumb.href = post.url;
             thumb.target = '_blank';
             thumb.rel = 'noopener noreferrer';
+            thumb.setAttribute('aria-label', 'Read ' + post.title);
             if (post.image) {
                 var image = document.createElement('img');
-                image.src = post.image;
+                var optimized = contentfulImageUrl(post.image, 800);
+                image.src = optimized || post.image;
+                if (optimized) {
+                    image.srcset = blogImageWidths.map(function (width) { return contentfulImageUrl(post.image, width) + ' ' + width + 'w'; }).join(', ');
+                    image.sizes = blogImageSizes;
+                }
                 image.alt = '';
                 image.loading = index === 0 ? 'eager' : 'lazy';
                 if (index === 0) image.fetchPriority = 'high';
@@ -158,5 +180,10 @@
         }
     }
 
-    window.addEventListener('load', refreshPosts, { once: true });
+    function refreshWhenIdle() {
+        if ('requestIdleCallback' in window) window.requestIdleCallback(refreshPosts, { timeout: 2500 });
+        else setTimeout(refreshPosts, 1500);
+    }
+
+    window.addEventListener('load', refreshWhenIdle, { once: true });
 })();

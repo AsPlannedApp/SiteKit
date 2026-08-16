@@ -58,7 +58,7 @@ export function buildDocument({
     return `<!DOCTYPE html>
 <html lang="${escapeHtml(seo.locale ? seo.locale.split('_')[0] : 'en')}">
 <head>
-${GENERATED_MARKER_PREFIX}${version} -- do not hand-edit; edit config/ and modules/*/content.json, then re-run "npm run generate" -->
+${GENERATED_MARKER_PREFIX}${version}; do not hand-edit; edit config/ and modules/*/content.json, then re-run "npm run generate" -->
     <title>${escapeHtml(title)}</title>
 
     <meta charset="UTF-8">

@@ -144,7 +144,7 @@ function heatmap(content) {
         const level = count === 0 ? 0 : count < 3 ? 1 : count < 7 ? 2 : count < 12 ? 3 : 4;
         const sourceLabel = source === 'both' ? `${githubLabel} and ${gitlabLabel}` : source === 'github' ? githubLabel : gitlabLabel;
         const label = `${date}: ${count} contribution${count === 1 ? '' : 's'}${source === 'none' ? '' : ` from ${sourceLabel}`}`;
-        cells.push(`<span class="contribution-day contribution-day--${source} contribution-day--level-${level}" data-date="${date}" title="${escapeHtml(label)}" aria-label="${escapeHtml(label)}"></span>`);
+        cells.push(`<span class="contribution-day contribution-day--${source} contribution-day--level-${level}" role="img" data-date="${date}" title="${escapeHtml(label)}" aria-label="${escapeHtml(label)}"></span>`);
     }
     const weeks = [];
     for (let index = 0; index < cells.length; index += 7) {
@@ -195,7 +195,7 @@ export function render({ content, ctx }) {
                 <div class="chart-card-wrap">
                     <div class="contribution-panel">
                         <div class="contribution-panel__top"><div class="contribution-legend"><span class="legend-github"><i class="ti ti-brand-github" aria-hidden="true"></i>${escapeHtml(githubLabel)}</span><span class="legend-gitlab"><i class="ti ti-brand-gitlab" aria-hidden="true"></i>${escapeHtml(gitlabLabel)}</span><span class="legend-both"><i class="ti ti-git-merge" aria-hidden="true"></i>Both</span></div><span class="legend-range"><i class="ti ti-calendar-stats" aria-hidden="true"></i>Last 12 months</span></div>
-                        <div class="contribution-scroll" tabindex="0" aria-label="Contribution calendar, scroll horizontally"><div class="contribution-chart" role="group">${heatmap(content)}</div></div>
+                        <div class="contribution-scroll" role="region" tabindex="0" aria-label="Contribution calendar, scroll horizontally"><div class="contribution-chart" role="group">${heatmap(content)}</div></div>
                     </div>
                 </div>
                 <script type="application/json" data-contribution-sources>${jsonForHtml(runtimeConfig)}</script>

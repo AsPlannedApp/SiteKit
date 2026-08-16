@@ -35,12 +35,18 @@ function setupStickyHeaderOffset() {
     const header = document.querySelector('.site-header');
     if (!header) return;
 
-    const sync = () => document.documentElement.style.setProperty('--header-h', `${header.offsetHeight - 24}px`);
-    sync();
+    const setHeight = (height) => document.documentElement.style.setProperty('--header-h', `${height - 24}px`);
 
     if ('ResizeObserver' in window) {
-        new ResizeObserver(sync).observe(header);
+        new ResizeObserver((entries) => {
+            const entry = entries[0];
+            const box = entry?.borderBoxSize;
+            const height = Array.isArray(box) ? box[0]?.blockSize : box?.blockSize;
+            setHeight(height || entry.contentRect.height);
+        }).observe(header);
     } else {
+        const sync = () => setHeight(header.offsetHeight);
+        sync();
         window.addEventListener('resize', sync, { passive: true });
     }
 }

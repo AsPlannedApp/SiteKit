@@ -8,17 +8,22 @@
         return Boolean(link.querySelector('[data-nav-icon]'));
     });
     var frame = 0;
+    var writeFrame = 0;
 
     function syncNavigationMode() {
         frame = 0;
-        nav.classList.remove('is-icons-only');
-
         if (!canUseIcons) return;
-        nav.classList.toggle('is-icons-only', nav.scrollWidth > nav.clientWidth + 1);
+        var shouldUseIcons = nav.scrollWidth > nav.clientWidth + 1;
+        writeFrame = requestAnimationFrame(function () {
+            writeFrame = 0;
+            nav.classList.toggle('is-icons-only', shouldUseIcons);
+        });
     }
 
     function scheduleSync() {
         if (frame) cancelAnimationFrame(frame);
+        if (writeFrame) cancelAnimationFrame(writeFrame);
+        nav.classList.remove('is-icons-only');
         frame = requestAnimationFrame(syncNavigationMode);
     }
 
