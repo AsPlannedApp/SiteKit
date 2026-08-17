@@ -13,6 +13,7 @@
   },
   "scripts": {
     "generate": "node bin/cli.js generate",
+    "build:pages": "npm run generate && node scripts/build-pages.js",
     "check": "node bin/cli.js check",
     "test": "node --test",
     "docs:screenshots": "npm run generate && node scripts/capture-readme-screenshots.js"
