@@ -29,6 +29,18 @@ npm run generate
 
 Open `index.html` in your browser. When you publish, upload both `index.html` and the generated root `assets/` folder.
 
+## Publish the demo on GitHub Pages
+
+The included Pages workflow rebuilds and publishes the demo whenever `main` is pushed. In the repository settings, choose **Pages → Build and deployment → Source → GitHub Actions** once, then push normally.
+
+To assemble the same deployable site locally:
+
+```bash
+npm run build:pages
+```
+
+The command writes only `index.html` and its generated `assets/` tree to the ignored `dist/` directory. Asset URLs stay relative, so they work both locally and at the `/SiteKit/` GitHub Pages project path.
+
 ## Choose your sections
 
 - [Blog](./modules/blog/README.md) — share recent writing from an Atom or RSS feed.
