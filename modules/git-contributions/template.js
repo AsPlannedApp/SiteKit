@@ -182,6 +182,7 @@ export function render({ content, ctx }) {
         { id: 'gitlab', label: gitlabLabel, url: gitlabProvider.contributionsFile ? ctx.asset(gitlabProvider.contributionsFile) : (gitlabProvider.contributionsUrl || '') },
     ];
     const runtimeConfig = {
+        calendar: { weeks: 53 },
         contributions: runtimeSources,
         gists: { url: githubGistUrl(content), limit: content.sources?.gists?.limit || 6 },
     };

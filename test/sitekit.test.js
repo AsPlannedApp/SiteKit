@@ -331,6 +331,7 @@ test('git contribution calendar renders inside its responsive centering wrapper'
     assert.match(rendered.html, /data-date="\d{4}-\d{2}-\d{2}"/);
     assert.match(rendered.html, /class="contribution-day[^"]*" role="img"/);
     assert.match(rendered.html, /"contributions":\[/);
+    assert.match(rendered.html, /"calendar":\{"weeks":53\}/);
     assert.match(rendered.html, /"gists":\{/);
     assert.match(rendered.html, /data-gist-list/);
     assert.match(rendered.html, /assets\/git-contributions\/contribution\.json/);

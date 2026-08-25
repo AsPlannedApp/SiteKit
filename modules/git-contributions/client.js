@@ -36,6 +36,61 @@
         return count === 0 ? 0 : count < 3 ? 1 : count < 7 ? 2 : count < 12 ? 3 : 4;
     }
 
+    function calendarRange(config, now) {
+        var end = new Date(now);
+        end.setUTCHours(0, 0, 0, 0);
+        end.setUTCDate(end.getUTCDate() + (6 - end.getUTCDay()));
+        var calendar = config || {};
+        var start;
+        if (calendar.startCap && Number.isInteger(calendar.maxMonths)) {
+            start = new Date(now);
+            var dayOfMonth = start.getUTCDate();
+            start.setUTCHours(0, 0, 0, 0);
+            start.setUTCDate(1);
+            start.setUTCMonth(start.getUTCMonth() - calendar.maxMonths);
+            var lastDay = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth() + 1, 0)).getUTCDate();
+            start.setUTCDate(Math.min(dayOfMonth, lastDay));
+            var cap = new Date(calendar.startCap + 'T00:00:00Z');
+            if (!Number.isNaN(cap.getTime()) && start < cap) start = cap;
+            start.setUTCDate(start.getUTCDate() - start.getUTCDay());
+        } else {
+            var weeks = Number.isInteger(calendar.weeks) && calendar.weeks > 0 ? calendar.weeks : 53;
+            start = new Date(end);
+            start.setUTCDate(start.getUTCDate() - (weeks * 7 - 1));
+        }
+        return { start: start, end: end };
+    }
+
+    function rebuildCalendar(config) {
+        var chart = document.querySelector('.contribution-chart');
+        if (!chart) return;
+        var range = calendarRange(config, new Date());
+        var fragment = document.createDocumentFragment();
+        var week;
+        for (var cursor = new Date(range.start), index = 0; cursor <= range.end; cursor.setUTCDate(cursor.getUTCDate() + 1), index += 1) {
+            if (index % 7 === 0) {
+                week = document.createElement('span');
+                week.className = 'contribution-week';
+                fragment.appendChild(week);
+            }
+            var cell = document.createElement('span');
+            var date = cursor.toISOString().slice(0, 10);
+            cell.className = 'contribution-day contribution-day--none contribution-day--level-0';
+            cell.dataset.date = date;
+            cell.setAttribute('role', 'img');
+            cell.title = date + ': 0 contributions';
+            cell.setAttribute('aria-label', cell.title);
+            week.appendChild(cell);
+        }
+        chart.replaceChildren(fragment);
+    }
+
+    function scrollContributionsToLatest() {
+        document.querySelectorAll('.contribution-scroll').forEach(function (scroll) {
+            scroll.scrollLeft = scroll.scrollWidth;
+        });
+    }
+
     function renderContributions(sources, values) {
         var maps = values.map(function (days) { return new Map(days.map(function (day) { return [day.date, day.count]; })); });
         document.querySelectorAll('.contribution-day[data-date]').forEach(function (cell) {
@@ -101,7 +156,11 @@
         if (sources.length) {
             try {
                 var values = await Promise.all(sources.map(function (source) { return fetchJson(source.url).then(normalizeDays); }));
-                if (values.every(function (days) { return days.length; })) renderContributions(sources, values);
+                if (values.every(function (days) { return days.length; })) {
+                    rebuildCalendar(config.calendar);
+                    renderContributions(sources, values);
+                    scrollContributionsToLatest();
+                }
             } catch (error) {
                 // Progressive enhancement: preserve the generated calendar when any source is unavailable.
             }
@@ -115,7 +174,7 @@
     }
 
     document.querySelectorAll('.contribution-scroll').forEach(function (scroll) {
-        requestAnimationFrame(function () { scroll.scrollLeft = scroll.scrollWidth; });
+        requestAnimationFrame(scrollContributionsToLatest);
     });
 
     document.querySelectorAll('.repo-card-link img').forEach(function (img) {
