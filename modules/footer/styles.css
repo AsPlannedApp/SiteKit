@@ -1,5 +1,6 @@
-/* Only bare alias custom properties (--fg-body, --fg-muted, --font-heading,
- * --type-s), never --ap-* directly, per the module style invariant. */
+/* Only bare alias custom properties (--brand, --fg-body, --fg-muted,
+ * --font-heading, --type-s), never --ap-* directly, per the module style
+ * invariant. */
 
 .site-footer {
     border-top: 2px solid var(--fg-body);
@@ -12,7 +13,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: flex-start;
     gap: 1.5rem;
     text-align: left;
 }
@@ -20,8 +21,19 @@
 .site-footer__name {
     font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 1.15rem;
+    font-size: 1rem;
     color: var(--fg-body);
+}
+
+.site-footer__sitekit-link {
+    color: var(--brand);
+    text-decoration-line: underline;
+    text-decoration-thickness: .08em;
+    text-underline-offset: .18em;
+}
+
+.site-footer__sitekit-link:hover {
+    color: var(--brand-opposite);
 }
 
 .site-footer__role {
@@ -45,4 +57,11 @@
 .site-footer__badge img {
     max-width: 100%;
     display: block;
+}
+
+@media (max-width: 480px) {
+    .site-footer__inner {
+        align-items: flex-start;
+        gap: 1rem;
+    }
 }

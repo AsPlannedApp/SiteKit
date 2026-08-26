@@ -14,6 +14,7 @@ import { validateGeneratedAssetContracts, validateModuleContent } from '../src/c
 import { atomPosts, contentfulImageUrl, feedPosts, prepare as prepareBlog, render as renderBlog, resolveFeedUrl } from '../modules/blog/template.js';
 import { gistLangMeta, normalizeDays, normalizeGists, prepare as prepareGit, render as renderGit, usernameFromProfile } from '../modules/git-contributions/template.js';
 import { render as renderHeader } from '../modules/header/template.js';
+import { render as renderFooter } from '../modules/footer/template.js';
 import { generateAssets as generatePhotoAssets, previewPath, previewWidths } from '../modules/photo-album/template.js';
 import { appManifest, generateAssets as generateAppIcons, render as renderAppIcons } from '../modules/app-icon/template.js';
 import { generateAssets as generateFavicons } from '../modules/favicon/template.js';
@@ -56,6 +57,16 @@ test('header navigation keeps an accessible name when labels collapse to icons',
     assert.match(rendered.html, /<a href="#writing" title="Writing &amp; Notes" aria-label="Writing &amp; Notes">/);
     assert.match(rendered.html, /data-nav-icon aria-hidden="true"/);
     assert.match(rendered.html, /<span data-nav-label>Writing &amp; Notes<\/span>/);
+});
+
+test('footer credits SiteKit unless a name override is supplied', () => {
+    const defaultFooter = renderFooter({ content: {}, ctx: { asset: (asset) => asset } });
+    assert.match(defaultFooter.html, /Built with <a class="site-footer__sitekit-link" href="https:\/\/github\.com\/AsPlannedApp\/SiteKit" target="_blank" rel="noopener noreferrer">SiteKit<\/a>/);
+    assert.doesNotMatch(defaultFooter.html, /site-footer__role/);
+
+    const customFooter = renderFooter({ content: { name: 'Alex Morgan', role: 'Developer' }, ctx: { asset: (asset) => asset } });
+    assert.match(customFooter.html, /site-footer__name">Alex Morgan/);
+    assert.match(customFooter.html, /site-footer__role">Developer/);
 });
 
 test('theme colors resolve to literals for raster assets', () => {

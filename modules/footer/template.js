@@ -32,13 +32,16 @@ export function render({ content, ctx }) {
         .join('');
 
     const extraHtml = (content.extraHtml || []).join('');
+    const signature = content.name
+        ? escapeHtml(content.name)
+        : 'Built with <a class="site-footer__sitekit-link" href="https://github.com/AsPlannedApp/SiteKit" target="_blank" rel="noopener noreferrer">SiteKit</a>';
+    const role = content.role ? `\n            <div class="site-footer__role">${escapeHtml(content.role)}</div>` : '';
 
     const html = `
 <footer class="site-footer">
     <div class="site-footer__inner">
         <div>
-            <div class="site-footer__name">${escapeHtml(content.name)}</div>
-            <div class="site-footer__role">${escapeHtml(content.role)}</div>
+            <div class="site-footer__name">${signature}</div>${role}
         </div>
         <div class="site-footer__badges">${badges}${extraHtml}
         </div>
