@@ -161,9 +161,8 @@ export function summary({ content }) {
 }
 
 function postCard(post, index) {
-    const media = post.image
-        ? imageMarkup(post, index)
-        : `<i class="ti ${escapeHtml(post.icon || 'ti-writing-sign')}" aria-hidden="true"></i>`;
+    const placeholder = `<i class="ti ${escapeHtml(post.icon || 'ti-writing-sign')}" aria-hidden="true"></i>`;
+    const media = `${placeholder}${post.image ? imageMarkup(post, index) : ''}`;
     return `<article class="blog-card" data-rv>
         <a class="blog-card__thumb${post.image ? '' : ' blog-card__thumb--icon'}" href="${escapeHtml(post.url)}" target="_blank" rel="noopener noreferrer" aria-label="Read ${escapeHtml(post.title)}">${media}</a>
         ${post.date ? `<div class="blog-card__date">${escapeHtml(post.date)}</div>` : ''}

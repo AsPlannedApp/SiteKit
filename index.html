@@ -724,6 +724,7 @@ main .section {
 
 .blog-card { min-width: 0; }
 .blog-card__thumb {
+    position: relative;
     aspect-ratio: 16 / 9;
     display: flex;
     align-items: center;
@@ -733,14 +734,22 @@ main .section {
     background: var(--surface-muted);
     margin-bottom: 1rem;
 }
-.blog-card__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.blog-card__thumb > i { color: var(--fg-muted); font-size: 2rem; transition: opacity .15s; }
+.blog-card__thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .15s; }
+.blog-card__thumb.is-image-ready img { opacity: 1; }
+.blog-card__thumb.is-image-ready > i { opacity: 0; }
 .blog-card__thumb--icon { color: #fff; background: var(--brand-opposite); font-size: 2rem; }
+.blog-card__thumb--icon > i { color: inherit; }
 .blog-card__date { color: var(--fg-accent); font-size: var(--type-xs); font-weight: 700; text-transform: uppercase; letter-spacing: .1em; }
 .blog-card h3 { font-size: var(--type-h4); margin: .45rem 0 .55rem; }
 .blog-card p { color: var(--fg-muted); font-size: .9rem; line-height: 1.65; }
 
 @media (max-width: 760px) {
     .blog-grid { grid-template-columns: 1fr; gap: 2.25rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .blog-card__thumb > i, .blog-card__thumb img { transition: none; }
 }
 
 
@@ -1703,17 +1712,17 @@ a.talks-player__cover:hover {
         </div>
         <p class="blog-notice" data-blog-notice>The live feed is unavailable, so these saved articles are shown instead.</p>
         <div class="blog-grid" data-blog-grid><article class="blog-card" data-rv>
-        <a class="blog-card__thumb" href="https://www.smashingmagazine.com/2026/08/eu-guidelines-ai-labelling/" target="_blank" rel="noopener noreferrer" aria-label="Read New EU Guidelines For AI Labelling"><img src="https://files.smashing.media/articles/eu-guidelines-ai-labelling/eu-guidelines-ai-labelling.jpg" alt="" loading="eager" fetchpriority="high"></a>
+        <a class="blog-card__thumb" href="https://www.smashingmagazine.com/2026/08/eu-guidelines-ai-labelling/" target="_blank" rel="noopener noreferrer" aria-label="Read New EU Guidelines For AI Labelling"><i class="ti ti-writing-sign" aria-hidden="true"></i><img src="https://files.smashing.media/articles/eu-guidelines-ai-labelling/eu-guidelines-ai-labelling.jpg" alt="" loading="eager" fetchpriority="high"></a>
         <div class="blog-card__date">August 13, 2026</div>
         <h3><a href="https://www.smashingmagazine.com/2026/08/eu-guidelines-ai-labelling/" target="_blank" rel="noopener noreferrer">New EU Guidelines For AI Labelling</a></h3>
         <p>New EU guidelines, why AI sparkles aren’t enough, when AI labels are required, and what the rules mean for AI-powered features and products.</p>
     </article><article class="blog-card" data-rv>
-        <a class="blog-card__thumb" href="https://www.smashingmagazine.com/2026/08/building-tactile-ux-honoring-intentional-design-lottie/" target="_blank" rel="noopener noreferrer" aria-label="Read Building Tactile UX: Honoring Intentional Design With Lottie"><img src="https://files.smashing.media/articles/building-tactile-ux-honoring-intentional-design-lottie/building-tactile-ux-honoring-intentional-design-lottie.jpg" alt="" loading="lazy"></a>
+        <a class="blog-card__thumb" href="https://www.smashingmagazine.com/2026/08/building-tactile-ux-honoring-intentional-design-lottie/" target="_blank" rel="noopener noreferrer" aria-label="Read Building Tactile UX: Honoring Intentional Design With Lottie"><i class="ti ti-writing-sign" aria-hidden="true"></i><img src="https://files.smashing.media/articles/building-tactile-ux-honoring-intentional-design-lottie/building-tactile-ux-honoring-intentional-design-lottie.jpg" alt="" loading="lazy"></a>
         <div class="blog-card__date">August 11, 2026</div>
         <h3><a href="https://www.smashingmagazine.com/2026/08/building-tactile-ux-honoring-intentional-design-lottie/" target="_blank" rel="noopener noreferrer">Building Tactile UX: Honoring Intentional Design With Lottie</a></h3>
         <p>When building a highly interactive, tactile web experience, the architecture must serve the art direction and preserve intentional motion.</p>
     </article><article class="blog-card" data-rv>
-        <a class="blog-card__thumb" href="https://www.smashingmagazine.com/2026/08/how-baseline-can-help-ship-less-javascript/" target="_blank" rel="noopener noreferrer" aria-label="Read How Baseline Can Help You Ship Less JavaScript"><img src="https://files.smashing.media/articles/how-baseline-can-help-ship-less-javascript/how-baseline-can-help-ship-less-javascript.jpg" alt="" loading="lazy"></a>
+        <a class="blog-card__thumb" href="https://www.smashingmagazine.com/2026/08/how-baseline-can-help-ship-less-javascript/" target="_blank" rel="noopener noreferrer" aria-label="Read How Baseline Can Help You Ship Less JavaScript"><i class="ti ti-writing-sign" aria-hidden="true"></i><img src="https://files.smashing.media/articles/how-baseline-can-help-ship-less-javascript/how-baseline-can-help-ship-less-javascript.jpg" alt="" loading="lazy"></a>
         <div class="blog-card__date">August 7, 2026</div>
         <h3><a href="https://www.smashingmagazine.com/2026/08/how-baseline-can-help-ship-less-javascript/" target="_blank" rel="noopener noreferrer">How Baseline Can Help You Ship Less JavaScript</a></h3>
         <p>The gap between “you need a library for this” and “the browser does this” keeps closing. Here’s how to audit dependencies against the web platform.</p>
@@ -2211,6 +2220,31 @@ if (document.readyState === 'loading') {
 (function () {
     var sourceElement = document.querySelector('[data-blog-source]');
     var grid = document.querySelector('[data-blog-grid]');
+
+    function setupBlogImage(thumb, image) {
+        function markBroken() {
+            thumb.classList.add('is-image-broken');
+            thumb.classList.remove('is-image-ready');
+            image.removeAttribute('srcset');
+            image.removeAttribute('src');
+        }
+
+        function markReady() {
+            if (!image.naturalWidth) return markBroken();
+            thumb.classList.add('is-image-ready');
+            thumb.classList.remove('is-image-broken');
+        }
+
+        image.addEventListener('load', markReady);
+        image.addEventListener('error', markBroken);
+        if (image.currentSrc && image.complete) markReady();
+    }
+
+    document.querySelectorAll('.blog-card__thumb img').forEach(function (image) {
+        var thumb = image.closest('.blog-card__thumb');
+        if (thumb) setupBlogImage(thumb, image);
+    });
+
     if (!sourceElement || !grid) return;
 
     var source;
@@ -2336,10 +2370,13 @@ if (document.readyState === 'loading') {
             thumb.target = '_blank';
             thumb.rel = 'noopener noreferrer';
             thumb.setAttribute('aria-label', 'Read ' + post.title);
+            var icon = document.createElement('i');
+            icon.className = 'ti ti-writing-sign';
+            icon.setAttribute('aria-hidden', 'true');
+            thumb.appendChild(icon);
             if (post.image) {
                 var image = document.createElement('img');
                 var optimized = contentfulImageUrl(post.image, 800);
-                image.src = optimized || post.image;
                 if (optimized) {
                     image.srcset = blogImageWidths.map(function (width) { return contentfulImageUrl(post.image, width) + ' ' + width + 'w'; }).join(', ');
                     image.sizes = blogImageSizes;
@@ -2347,12 +2384,9 @@ if (document.readyState === 'loading') {
                 image.alt = '';
                 image.loading = index === 0 ? 'eager' : 'lazy';
                 if (index === 0) image.fetchPriority = 'high';
+                setupBlogImage(thumb, image);
+                image.src = optimized || post.image;
                 thumb.appendChild(image);
-            } else {
-                var icon = document.createElement('i');
-                icon.className = 'ti ti-writing-sign';
-                icon.setAttribute('aria-hidden', 'true');
-                thumb.appendChild(icon);
             }
             card.appendChild(thumb);
 

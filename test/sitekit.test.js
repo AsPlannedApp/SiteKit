@@ -322,6 +322,7 @@ test('blog renders accessible responsive Contentful images without rewriting oth
         },
     });
     assert.match(rendered.html, /aria-label="Read An accessible post"/);
+    assert.match(rendered.html, /blog-card__thumb[^>]*>[\s\S]*?<i class="ti ti-writing-sign" aria-hidden="true"><\/i><img/);
     assert.match(rendered.html, /srcset="[^"]+480w[^"]+800w[^"]+1200w"/);
     assert.match(rendered.html, /sizes="\(max-width: 760px\)/);
 });

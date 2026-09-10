@@ -35,6 +35,7 @@ The feed can contain up to 12 visible posts. Saved posts need a title, URL, and 
 - A same-site feed such as `/blog/feed` is the easiest choice.
 - A feed on another domain must allow your website through CORS if you want the browser to refresh it after the page loads.
 - When a browser refresh fails, the posts already included during generation stay in place.
+- Every card keeps a neutral icon placeholder beneath its remote image; the image appears only after it loads successfully, so unavailable images do not leave a broken or empty thumbnail.
 - Relative feed URLs use `seo.canonicalUrl` during generation, so set that to your real website before publishing.
 - Cards use three columns on wide screens and one column below 760px. Dark mode follows the rest of SiteKit.
 

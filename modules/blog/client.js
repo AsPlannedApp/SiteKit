@@ -1,6 +1,31 @@
 (function () {
     var sourceElement = document.querySelector('[data-blog-source]');
     var grid = document.querySelector('[data-blog-grid]');
+
+    function setupBlogImage(thumb, image) {
+        function markBroken() {
+            thumb.classList.add('is-image-broken');
+            thumb.classList.remove('is-image-ready');
+            image.removeAttribute('srcset');
+            image.removeAttribute('src');
+        }
+
+        function markReady() {
+            if (!image.naturalWidth) return markBroken();
+            thumb.classList.add('is-image-ready');
+            thumb.classList.remove('is-image-broken');
+        }
+
+        image.addEventListener('load', markReady);
+        image.addEventListener('error', markBroken);
+        if (image.currentSrc && image.complete) markReady();
+    }
+
+    document.querySelectorAll('.blog-card__thumb img').forEach(function (image) {
+        var thumb = image.closest('.blog-card__thumb');
+        if (thumb) setupBlogImage(thumb, image);
+    });
+
     if (!sourceElement || !grid) return;
 
     var source;
@@ -126,10 +151,13 @@
             thumb.target = '_blank';
             thumb.rel = 'noopener noreferrer';
             thumb.setAttribute('aria-label', 'Read ' + post.title);
+            var icon = document.createElement('i');
+            icon.className = 'ti ti-writing-sign';
+            icon.setAttribute('aria-hidden', 'true');
+            thumb.appendChild(icon);
             if (post.image) {
                 var image = document.createElement('img');
                 var optimized = contentfulImageUrl(post.image, 800);
-                image.src = optimized || post.image;
                 if (optimized) {
                     image.srcset = blogImageWidths.map(function (width) { return contentfulImageUrl(post.image, width) + ' ' + width + 'w'; }).join(', ');
                     image.sizes = blogImageSizes;
@@ -137,12 +165,9 @@
                 image.alt = '';
                 image.loading = index === 0 ? 'eager' : 'lazy';
                 if (index === 0) image.fetchPriority = 'high';
+                setupBlogImage(thumb, image);
+                image.src = optimized || post.image;
                 thumb.appendChild(image);
-            } else {
-                var icon = document.createElement('i');
-                icon.className = 'ti ti-writing-sign';
-                icon.setAttribute('aria-hidden', 'true');
-                thumb.appendChild(icon);
             }
             card.appendChild(thumb);
 
