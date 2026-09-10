@@ -35,14 +35,14 @@
 .repo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: .15rem .25rem; }
 .repo-card-link { position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: center; column-gap: .7rem; padding: .5rem .7rem; border: 1px solid transparent; border-radius: 6px; color: rgba(255,255,255,.55); transition: background .15s, border-color .15s; }
 .repo-card-link:hover { background: rgba(255,255,255,.05); border-color: rgba(234,200,113,.35); opacity: 1; }
-.repo-card-link img { grid-row: 1 / span 2; width: 72px; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 4px; display: block; background: rgba(255,255,255,.06); transition: opacity .15s; }
-.repo-card-link:not(.is-image-ready) img { opacity: 0; }
-.repo-card-link.is-image-broken { grid-template-columns: 1fr auto; }
-.repo-card-link.is-image-broken img { display: none; }
+.repo-card-link__cover { grid-row: 1 / span 2; position: relative; display: grid; place-items: center; width: 72px; aspect-ratio: 1200 / 630; overflow: hidden; border-radius: 4px; background: rgba(255,255,255,.08); color: rgba(255,255,255,.3); }
+.repo-card-link__cover > i { font-size: 1.25rem; transition: opacity .15s; }
+.repo-card-link__cover img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .15s; }
+.repo-card-link.is-image-ready .repo-card-link__cover img { opacity: 1; }
+.repo-card-link.is-image-ready .repo-card-link__cover > i { opacity: 0; }
 .repo-card-link__name { color: var(--brand-fill); font-weight: 700; overflow-wrap: anywhere; align-self: end; }
 .repo-card-link__arrow { color: rgba(255,255,255,.3); font-size: .75rem; }
 .repo-card-link__desc { grid-column: 2 / -1; font-size: .75rem; color: rgba(255,255,255,.65); margin-top: .15rem; align-self: start; }
-.repo-card-link.is-image-broken .repo-card-link__desc { grid-column: 1 / -1; }
 
 .gist-list { display: flex; flex-wrap: wrap; align-items: flex-start; gap: .6rem; }
 .gist-pill { display: inline-flex; flex: 0 0 auto; align-items: center; gap: .5rem; max-width: 100%; border: 1px solid rgba(255,255,255,.2); border-radius: 999px; padding: .45rem .9rem; color: rgba(255,255,255,.85); font-size: .8rem; font-weight: 700; }

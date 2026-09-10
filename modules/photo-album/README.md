@@ -31,11 +31,11 @@ Put the original PNG, JPG, or JPEG files in `modules/photo-album/assets/photos/`
 
 ## What SiteKit does for you
 
-During generation, SiteKit creates smaller WebP previews for the board and keeps each original for the full-screen viewer. Smaller originals are never enlarged.
+During generation, SiteKit creates smaller WebP previews for the board and an optimized full-size copy for the viewer. PNG photographs use lossy palette compression and JPEG photographs use MozJPEG compression, while the authored originals in the module remain untouched. Smaller originals are never enlarged.
 
 Choose between one and five desktop columns. The board changes to two columns below 760px and one below 480px, while dark mode follows the rest of the site.
 
-The viewer supports previous and next buttons, Left and Right arrow keys, Escape, backdrop clicks, and returning focus to the photograph that opened it.
+The viewer immediately enlarges the selected preview while the original loads, shows a slim loading line on slower connections, and crossfades to the decoded full-resolution photograph. It also supports previous and next buttons, Left and Right arrow keys, Escape, backdrop clicks, and returning focus to the photograph that opened it.
 
 ## Configuration reference
 

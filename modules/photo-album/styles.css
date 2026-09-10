@@ -25,10 +25,19 @@
 .album-dialog::backdrop { background: rgba(0,0,0,.82); }
 .album-dialog[open] { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 1rem; }
 .album-dialog figure { margin: 0; min-width: 0; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
-.album-dialog figure img { max-width: 100%; max-height: calc(100vh - 7rem); object-fit: contain; }
+.album-dialog__media { position: relative; display: grid; width: min(100%, calc((100vh - 7rem) * var(--album-photo-ratio, 1.3333))); aspect-ratio: var(--album-photo-ratio, 1.3333); min-width: 0; max-height: calc(100vh - 7rem); overflow: hidden; }
+.album-dialog__media img { grid-area: 1 / 1; display: block; width: 100%; height: 100%; object-fit: contain; }
+.album-dialog__preview { z-index: 1; }
+.album-dialog__image { z-index: 2; opacity: 0; transition: opacity .24s ease; }
+.album-dialog__image.is-ready { opacity: 1; }
+.album-dialog__progress { position: absolute; z-index: 3; right: 0; bottom: 0; left: 0; height: 3px; overflow: hidden; background: rgba(255,255,255,.18); opacity: 0; transition: opacity .12s ease .1s; }
+.album-dialog__media.is-loading .album-dialog__progress { opacity: 1; }
+.album-dialog__progress::after { content: ""; position: absolute; inset: 0; width: 42%; background: rgba(255,255,255,.82); transform: translateX(-110%); animation: album-loading 1.1s ease-in-out infinite; }
+@keyframes album-loading { to { transform: translateX(340%); } }
 .album-dialog figcaption { display: flex; gap: 1rem; align-items: baseline; font-family: "Comic Sans MS", "Bradley Hand", cursive; }
 .album-dialog figcaption small { color: #aaa; font: .75rem var(--font-body); }
 .album-dialog__close, .album-dialog__nav { border: 0; border-radius: 50%; background: rgba(255,255,255,.1); color: #fff; cursor: pointer; font-size: 1.4rem; width: 44px; height: 44px; }
 .album-dialog__close { position: fixed; z-index: 2; right: 1rem; top: 1rem; }
 @media (max-width: 760px) { .bulletin-board { grid-template-columns: repeat(2, 1fr); } .album-dialog[open] { grid-template-columns: 40px minmax(0,1fr) 40px; padding-inline: .5rem; gap: .25rem; } }
 @media (max-width: 480px) { .bulletin-board { grid-template-columns: 1fr; padding-inline: 2.5rem; } }
+@media (prefers-reduced-motion: reduce) { .album-dialog__image { transition: none; } .album-dialog__progress::after { width: 100%; transform: none; animation: none; } }

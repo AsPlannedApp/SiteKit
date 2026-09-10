@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
-import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
@@ -12,10 +12,10 @@ import { removeInactiveModuleAssets } from '../src/core/asset-pipeline.js';
 import { buildAssetCtx, resolveActiveModuleIds, validateModuleConfiguration } from '../src/core/module-loader.js';
 import { validateGeneratedAssetContracts, validateModuleContent } from '../src/core/content-validation.js';
 import { atomPosts, contentfulImageUrl, feedPosts, prepare as prepareBlog, render as renderBlog, resolveFeedUrl } from '../modules/blog/template.js';
-import { gistLangMeta, normalizeDays, normalizeGists, prepare as prepareGit, render as renderGit, usernameFromProfile } from '../modules/git-contributions/template.js';
+import { demoContributions, gistLangMeta, normalizeDays, normalizeGists, prepare as prepareGit, render as renderGit, usernameFromProfile } from '../modules/git-contributions/template.js';
 import { render as renderHeader } from '../modules/header/template.js';
 import { render as renderFooter } from '../modules/footer/template.js';
-import { generateAssets as generatePhotoAssets, previewPath, previewWidths } from '../modules/photo-album/template.js';
+import { generateAssets as generatePhotoAssets, previewPath, previewWidths, render as renderPhotoAlbum } from '../modules/photo-album/template.js';
 import { appManifest, generateAssets as generateAppIcons, render as renderAppIcons } from '../modules/app-icon/template.js';
 import { generateAssets as generateFavicons } from '../modules/favicon/template.js';
 import { GENERATED_OG_HEIGHT, GENERATED_OG_WIDTH, generateAssets as generateOgImage, render as renderOgMeta, wrapText } from '../modules/og-meta/template.js';
@@ -206,6 +206,22 @@ test('photo preview paths preserve PNG URLs and avoid JPEG stem collisions', () 
     assert.equal(previewPath('photos/example.jpeg', 640), 'previews/example-jpeg-640.webp');
 });
 
+test('photo viewer renders a preview-first loading surface without eagerly loading an original', () => {
+    const rendered = renderPhotoAlbum({
+        content: {
+            heading: 'Photos',
+            columns: 3,
+            photos: [{ file: 'photos/example.jpg', label: 'Example', alt: 'Example photograph' }],
+        },
+        ctx: buildAssetCtx('photo-album'),
+    });
+    assert.match(rendered.html, /data-album-media aria-busy="false"/);
+    assert.match(rendered.html, /data-album-preview alt="" aria-hidden="true"/);
+    assert.match(rendered.html, /data-album-progress role="progressbar" aria-label="Loading full-resolution photo" hidden/);
+    assert.match(rendered.html, /data-album-image alt=""/);
+    assert.doesNotMatch(rendered.html, /data-album-image[^>]+src=/);
+});
+
 test('photo album generates WebP previews from a JPEG original', async (t) => {
     const moduleDir = await mkdtemp(path.join(os.tmpdir(), 'sitekit-photo-jpeg-'));
     t.after(() => rm(moduleDir, { recursive: true, force: true }));
@@ -215,6 +231,7 @@ test('photo album generates WebP previews from a JPEG original', async (t) => {
     await sharp({ create: { width: 800, height: 500, channels: 3, background: '#336699' } })
         .jpeg()
         .toFile(path.join(photosDir, 'source.jpg'));
+    const sourceSize = (await stat(path.join(photosDir, 'source.jpg'))).size;
 
     await generatePhotoAssets({
         content: { columns: 3, photos: [{ file: 'photos/source.jpg', label: 'Source', alt: 'JPEG source' }] },
@@ -225,6 +242,10 @@ test('photo album generates WebP previews from a JPEG original', async (t) => {
     const metadata = await sharp(path.join(outputDir, 'previews', 'source-jpg-320.webp')).metadata();
     assert.equal(metadata.format, 'webp');
     assert.equal(metadata.width, 320);
+    const optimized = await sharp(path.join(outputDir, 'photos', 'source.jpg')).metadata();
+    assert.equal(optimized.format, 'jpeg');
+    assert.deepEqual([optimized.width, optimized.height], [800, 500]);
+    assert.ok((await stat(path.join(outputDir, 'photos', 'source.jpg'))).size < sourceSize);
 });
 
 test('Atom fixture is normalized into static posts', () => {
@@ -318,6 +339,42 @@ test('gist languages use the homepage badge metadata', () => {
     assert.deepEqual(gistLangMeta.JavaScript, { code: 'js', label: 'JS' });
     assert.deepEqual(gistLangMeta.Dockerfile, { code: 'docker', label: 'Docker' });
     assert.equal(gistLangMeta.Rust, undefined);
+});
+
+test('demo contributions fill weekdays with a deterministic mix and skip holidays', () => {
+    const demo = demoContributions(new Date('2026-09-10T12:00:00Z'));
+    const github = new Map(demo.github.map((day) => [day.date, day.count]));
+    const gitlab = new Map(demo.gitlab.map((day) => [day.date, day.count]));
+    const dates = new Set([...github.keys(), ...gitlab.keys()]);
+
+    for (let cursor = new Date('2025-09-11T00:00:00Z'); cursor <= new Date('2026-09-10T00:00:00Z'); cursor.setUTCDate(cursor.getUTCDate() + 1)) {
+        const date = cursor.toISOString().slice(0, 10);
+        const isHoliday = ['01-01', '05-01', '12-24', '12-25', '12-26', '12-31'].includes(date.slice(5));
+        const isWeekday = cursor.getUTCDay() > 0 && cursor.getUTCDay() < 6;
+        assert.equal(dates.has(date), isWeekday && !isHoliday, date);
+    }
+    assert.ok([...github.values(), ...gitlab.values()].every((count) => count >= 1 && count <= 5));
+    assert.ok([...dates].some((date) => github.has(date) && !gitlab.has(date)));
+    assert.ok([...dates].some((date) => !github.has(date) && gitlab.has(date)));
+    assert.ok([...dates].some((date) => github.has(date) && gitlab.has(date)));
+});
+
+test('repository cards retain an image placeholder with or without a cover', () => {
+    const rendered = renderGit({
+        content: {
+            heading: 'Code',
+            sources: { github: {}, gitlab: {}, gists: {} },
+            fallback: { github: [], gitlab: [], gists: [] },
+            repos: [
+                { title: 'Covered', description: 'Has a cover', url: 'https://example.test/covered', coverImage: 'https://example.test/cover.png' },
+                { title: 'Missing', description: 'Needs a placeholder', url: 'https://example.test/missing' },
+            ],
+        },
+        ctx: buildAssetCtx('git-contributions'),
+    });
+    assert.equal((rendered.html.match(/class="repo-card-link__cover"/g) || []).length, 2);
+    assert.match(rendered.html, /repo-card-link__cover" aria-hidden="true"><i class="ti ti-photo"><\/i><img/);
+    assert.match(rendered.html, /class="repo-card-link is-image-broken"[^>]*>[\s\S]*?<span class="repo-card-link__cover"/);
 });
 
 test('git contribution calendar renders inside its responsive centering wrapper', () => {

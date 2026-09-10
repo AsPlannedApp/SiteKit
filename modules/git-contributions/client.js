@@ -177,7 +177,7 @@
         requestAnimationFrame(scrollContributionsToLatest);
     });
 
-    document.querySelectorAll('.repo-card-link img').forEach(function (img) {
+    document.querySelectorAll('.repo-card-link__cover img').forEach(function (img) {
         const card = img.closest('.repo-card-link');
         if (!card) return;
 

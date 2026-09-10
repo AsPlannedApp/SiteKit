@@ -4,6 +4,8 @@
 
 Give your coding work a home outside any single platform. This module combines a 12-month activity calendar with projects you are proud of and a small list of public gists.
 
+The included example enables `demo`, which creates a deterministic year of weekday activity split across GitHub and GitLab, with weekends and common holidays left empty. Remove `demo` when connecting real contribution sources.
+
 ## Add it to your site
 
 Add `git-contributions` to `modules.order` in `site.config.json`, then choose the sources in `modules/git-contributions/content.json`:
@@ -30,7 +32,7 @@ For GitHub, a public profile URL can supply both the contribution and gist endpo
 
 ## Add projects and fallback content
 
-`repos` contains the project cards you want to feature. Each one has a `title`, `description`, and `url`, plus optional `language` and `coverImage` fields.
+`repos` contains the project cards you want to feature. Each one has a `title`, `description`, and `url`, plus optional `language` and `coverImage` fields. A neutral image placeholder keeps the card aligned while a cover loads or when it is unavailable.
 
 `fallback.github`, `fallback.gitlab`, and `fallback.gists` keep each part useful if its source is unavailable. SiteKit resolves them during generation, then refreshes public sources in the browser. A failed browser refresh leaves the generated calendar or gist list untouched.
 

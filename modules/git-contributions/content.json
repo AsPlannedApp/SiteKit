@@ -2,9 +2,10 @@
   "eyebrow": "Activity",
   "heading": "Code and Contributions",
   "note": "Projects, public contributions, and snippets",
+  "demo": true,
   "sources": {
     "github": { "label": "GitHub", "profileUrl": "", "contributionsUrl": "" },
-    "gitlab": { "label": "GitLab", "profileUrl": "", "contributionsFile": "contribution.json" },
+    "gitlab": { "label": "GitLab", "profileUrl": "", "contributionsUrl": "" },
     "gists": { "url": "", "limit": 6 }
   },
   "fallback": {

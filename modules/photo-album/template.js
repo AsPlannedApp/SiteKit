@@ -1,5 +1,5 @@
 import { escapeHtml } from '../../src/core/html-util.js';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 
@@ -21,11 +21,29 @@ function previewSizes(columns) {
 export async function generateAssets({ content, moduleDir, outputDir }) {
     const widths = previewWidths(content.columns);
     await mkdir(path.join(outputDir, 'previews'), { recursive: true });
-    await Promise.all((content.photos || []).flatMap((photo) => widths.map(async (width) => {
+    await Promise.all((content.photos || []).flatMap((photo) => {
         const input = path.join(moduleDir, 'assets', photo.file);
-        const output = path.join(outputDir, previewPath(photo.file, width));
-        await sharp(input).resize({ width, withoutEnlargement: true }).webp({ quality: 80 }).toFile(output);
-    })));
+        const optimizedOutput = path.join(outputDir, photo.file);
+        const optimize = async () => {
+            await mkdir(path.dirname(optimizedOutput), { recursive: true });
+            const source = await readFile(input);
+            const pipeline = sharp(source);
+            let optimized;
+            if (path.extname(photo.file) === '.png') {
+                optimized = await pipeline.png({ compressionLevel: 9, adaptiveFiltering: true, palette: true, quality: 82, effort: 10 }).toBuffer();
+            } else {
+                optimized = await pipeline.jpeg({ quality: 82, mozjpeg: true }).toBuffer();
+            }
+            await writeFile(optimizedOutput, optimized.length < source.length ? optimized : source);
+        };
+        return [
+            optimize(),
+            ...widths.map(async (width) => {
+                const output = path.join(outputDir, previewPath(photo.file, width));
+                await sharp(input).resize({ width, withoutEnlargement: true }).webp({ quality: 80 }).toFile(output);
+            }),
+        ];
+    }));
 }
 
 export function summary({ content }) {
@@ -45,9 +63,6 @@ export function render({ content, ctx }) {
             <span class="polaroid__label">${escapeHtml(photo.label)}</span>
         </button>`;
     }).join('');
-    const firstPhoto = photoItems[0];
-    const firstSrc = firstPhoto ? ctx.asset(firstPhoto.file) : '';
-
     return { html: `<section id="photo-album" class="section" aria-label="Photo album">
     <div class="wrap">
         <div class="section-head"><div><span class="eyebrow">${escapeHtml(content.eyebrow || '')}</span><h2>${escapeHtml(content.heading)}</h2></div><span class="section-head__note" data-note>${escapeHtml(content.note || '')}</span></div>
@@ -56,7 +71,14 @@ export function render({ content, ctx }) {
     <dialog class="album-dialog" aria-label="Photo viewer">
         <button class="album-dialog__close" type="button" data-album-close aria-label="Close photo viewer"><i class="ti ti-x" aria-hidden="true"></i></button>
         <button class="album-dialog__nav album-dialog__nav--prev" type="button" data-album-prev aria-label="Previous photo"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
-        <figure><img data-album-image src="${escapeHtml(firstSrc)}" alt="${escapeHtml(firstPhoto?.alt || '')}"><figcaption><span data-album-label>${escapeHtml(firstPhoto?.label || '')}</span><small data-album-count>${photoItems.length ? `1 / ${photoItems.length}` : ''}</small></figcaption></figure>
+        <figure>
+            <span class="album-dialog__media" data-album-media aria-busy="false">
+                <img class="album-dialog__preview" data-album-preview alt="" aria-hidden="true">
+                <img class="album-dialog__image" data-album-image alt="">
+                <span class="album-dialog__progress" data-album-progress role="progressbar" aria-label="Loading full-resolution photo" hidden></span>
+            </span>
+            <figcaption><span data-album-label></span><small data-album-count></small></figcaption>
+        </figure>
         <button class="album-dialog__nav album-dialog__nav--next" type="button" data-album-next aria-label="Next photo"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
     </dialog>
 </section>` };

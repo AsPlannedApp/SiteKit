@@ -4,6 +4,7 @@
   "required": ["heading", "sources", "fallback", "repos"],
   "properties": {
     "eyebrow": { "type": "string" }, "heading": { "type": "string" }, "note": { "type": "string" }, "countOverride": {},
+    "demo": { "type": "boolean" },
     "sources": {
       "type": "object", "required": ["github", "gitlab", "gists"],
       "properties": {

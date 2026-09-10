@@ -72,9 +72,39 @@ function jsonForHtml(value) {
     return JSON.stringify(value).replaceAll('<', '\\u003c').replaceAll('>', '\\u003e').replaceAll('&', '\\u0026');
 }
 
-export async function prepare({ content, fetch, moduleDir }) {
+const demoHolidayDates = new Set(['01-01', '05-01', '12-24', '12-25', '12-26', '12-31']);
+
+function demoContributions(now = new Date()) {
+    const end = new Date(now);
+    end.setUTCHours(0, 0, 0, 0);
+    const start = new Date(end);
+    start.setUTCDate(start.getUTCDate() - 364);
+    const github = [];
+    const gitlab = [];
+
+    for (const cursor = new Date(start); cursor <= end; cursor.setUTCDate(cursor.getUTCDate() + 1)) {
+        const weekday = cursor.getUTCDay();
+        const date = cursor.toISOString().slice(0, 10);
+        if (weekday === 0 || weekday === 6 || demoHolidayDates.has(date.slice(5))) continue;
+
+        const dayNumber = Math.floor(cursor.getTime() / 86400000);
+        const hash = Math.imul(dayNumber ^ 0x9e3779b9, 2654435761) >>> 0;
+        const lane = hash % 5;
+        const githubCount = 1 + ((hash >>> 3) % 5);
+        const gitlabCount = 1 + ((hash >>> 11) % 5);
+        if (lane !== 1) github.push({ date, count: githubCount });
+        if (lane !== 0 && lane !== 3) gitlab.push({ date, count: gitlabCount });
+    }
+
+    return { github, gitlab };
+}
+
+export async function prepare({ content, fetch, moduleDir, now = new Date() }) {
     const warnings = [];
     const fallback = content.fallback || {};
+    if (content.demo) {
+        return { content: { ...content, resolved: { ...demoContributions(now), gists: fallback.gists || [] } }, warnings };
+    }
     const githubProvider = content.sources.github || {};
     const gitlabProvider = content.sources.gitlab || {};
     const githubUrl = githubContributionUrl(githubProvider);
@@ -158,7 +188,7 @@ function repoCard(repo, ctx) {
         ? `<img src="${escapeHtml(resolveHref(repo.coverImage, ctx))}" alt="" loading="lazy">`
         : '';
     return `<a class="repo-card-link${image ? '' : ' is-image-broken'}" href="${escapeHtml(repo.url)}" target="_blank" rel="noopener noreferrer">
-        ${image}<strong class="repo-card-link__name">${escapeHtml(repo.title)}</strong><span class="repo-card-link__arrow" aria-hidden="true">↗</span>
+        <span class="repo-card-link__cover" aria-hidden="true"><i class="ti ti-photo"></i>${image}</span><strong class="repo-card-link__name">${escapeHtml(repo.title)}</strong><span class="repo-card-link__arrow" aria-hidden="true">↗</span>
         <span class="repo-card-link__desc">${escapeHtml(repo.description)}</span>
     </a>`;
 }
@@ -210,4 +240,4 @@ export function render({ content, ctx }) {
 </section>` };
 }
 
-export { normalizeDays, normalizeGists, usernameFromProfile };
+export { demoContributions, normalizeDays, normalizeGists, usernameFromProfile };
