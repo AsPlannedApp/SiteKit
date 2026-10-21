@@ -36,10 +36,8 @@ function renderIssueIndex(content, ctx) {
 function renderPromos(promos, ctx) {
     return `<div class="hero-promos" aria-label="Featured projects">
         ${promos.map((promo, index) => `<article class="hero-promo" aria-labelledby="hero-promo-title-${index}">
-            <div class="hero-promo__header">
-                ${promo.image ? `<img class="hero-promo__image" src="${escapeHtml(ctx.asset(promo.image))}" alt="" width="64" height="64">` : ''}
-                <div>
-                    ${promo.eyebrow ? `<p class="hero-promo__eyebrow">${escapeHtml(promo.eyebrow)}</p>` : ''}
+            <div class="hero-promo__header">${promo.image ? `<img class="hero-promo__image" src="${escapeHtml(ctx.asset(promo.image))}" alt="" width="64" height="64">` : ''}
+                <div>${promo.eyebrow ? `<p class="hero-promo__eyebrow">${escapeHtml(promo.eyebrow)}</p>` : ''}
                     <h2 id="hero-promo-title-${index}" class="hero-promo__title">${escapeHtml(promo.title)}</h2>
                 </div>
             </div>
