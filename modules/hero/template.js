@@ -1,15 +1,6 @@
 import { escapeHtml } from '../../src/core/html-util.js';
 
-/**
- * modules/hero/template.js
- *
- * The "In this issue" list is NOT hand-authored data on this module --
- * it's built from ctx.sections (every enabled content-section module's summary()/
- * countOverride), so it grows automatically as modules are added,
- * with no changes needed here. An optional avatar image (not present in
- * the source site) demonstrates a nested module asset path
- * (images/avatar-placeholder.svg -> /assets/hero/images/avatar-placeholder.svg).
- */
+/** The hero shows up to two authored promos, or the derived section index. */
 
 export function summary() {
     return null; // chrome -- hero doesn't appear in its own issue-index
@@ -42,6 +33,22 @@ function renderIssueIndex(content, ctx) {
         </div>`;
 }
 
+function renderPromos(promos, ctx) {
+    return `<div class="hero-promos" aria-label="Featured projects">
+        ${promos.map((promo, index) => `<article class="hero-promo" aria-labelledby="hero-promo-title-${index}">
+            <div class="hero-promo__header">
+                ${promo.image ? `<img class="hero-promo__image" src="${escapeHtml(ctx.asset(promo.image))}" alt="" width="64" height="64">` : ''}
+                <div>
+                    ${promo.eyebrow ? `<p class="hero-promo__eyebrow">${escapeHtml(promo.eyebrow)}</p>` : ''}
+                    <h2 id="hero-promo-title-${index}" class="hero-promo__title">${escapeHtml(promo.title)}</h2>
+                </div>
+            </div>
+            <p class="hero-promo__description">${escapeHtml(promo.description)}</p>
+            <a class="btn btn-ghost btn-md hero-promo__action" href="${escapeHtml(promo.action.href)}"${promo.action.external ? ' target="_blank" rel="noopener noreferrer"' : ''}>${escapeHtml(promo.action.label)}</a>
+        </article>`).join('\n')}
+    </div>`;
+}
+
 export function render({ content, config, ctx }) {
     const avatar = content.avatar
         ? `<img class="hero-avatar" src="${ctx.asset(content.avatar)}" alt="${escapeHtml(content.name)}">`
@@ -49,9 +56,12 @@ export function render({ content, config, ctx }) {
 
     const ctas = (content.ctas || []).map(renderCta).join('\n                ');
 
+    const promos = content.promos || [];
+    const promoClass = promos.length ? ` hero-inner--promos hero-inner--promos-${promos.length}` : '';
+
     const html = `
 <section id="top">
-    <div class="hero-inner">
+    <div class="hero-inner${promoClass}">
         <div class="hero-copy">
             ${avatar}
             <div class="hero-eyebrow">${escapeHtml(content.eyebrow || '')}</div>
@@ -60,7 +70,7 @@ export function render({ content, config, ctx }) {
             <div class="hero-cta">
                 ${ctas}
             </div>
-        </div>${renderIssueIndex(content, ctx)}
+        </div>${promos.length ? renderPromos(promos, ctx) : renderIssueIndex(content, ctx)}
     </div>
 </section>`;
 

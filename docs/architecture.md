@@ -174,3 +174,18 @@ Module CSS should consume semantic theme aliases such as `--bg-page`, `--bg-pane
 Use `escapeHtml()` for authored text and `resolveHref()` when a field may be either an external URL or a module-relative asset.
 
 Client scripts should contain only behavior that must run in the browser. Fetch remote data in `prepare()` first so generated output remains complete; browser refreshes may progressively replace it when fresher public data is available.
+
+## Hero project promos
+
+The hero's optional `promos` array replaces its section index when non-empty. It
+accepts at most two entries; use a separate projects section if a third is needed.
+Each entry requires `title`, `description`, and `action: { label, href }`. Optional
+`image` is module-relative and resolved through `ctx.asset()`, `eyebrow` adds a small
+label, and `action.external: true` opens a new tab with `noopener noreferrer`.
+Actions accept HTTP(S), root-relative, or fragment destinations.
+
+With one entry, the introduction sits beside a 380px box above 1024px and above
+it on smaller screens. With two, the introduction and two equal-height boxes sit
+side by side from 1200px; below that the introduction sits above a two-column
+project row, which stacks below 700px. Promos follow authored array order.
+Omitting `promos` or setting it to `[]` retains the existing derived section index.
