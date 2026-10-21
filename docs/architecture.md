@@ -189,3 +189,8 @@ it on smaller screens. With two, the introduction and two equal-height boxes sit
 side by side from 1200px; below that the introduction sits above a two-column
 project row, which stacks below 700px. Promos follow authored array order.
 Omitting `promos` or setting it to `[]` retains the existing derived section index.
+
+Run `npm run verify:hero` after generation to exercise zero, one, and two promos
+at 1440, 1200, 1024, 700, 390, and 320px in both themes. The existing 390px body
+minimum is intentional: at narrower browser widths the page keeps a 390px layout.
+The check allows that floor and rejects overflow beyond it.

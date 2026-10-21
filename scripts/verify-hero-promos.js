@@ -43,6 +43,7 @@ try {
                     const style = (node) => Object.fromEntries([...getComputedStyle(node)].map((key) => [key, getComputedStyle(node).getPropertyValue(key)]));
                     return {
                         overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+                        minimumWidth: parseFloat(getComputedStyle(document.body).minWidth) || 0,
                         intro: rect(document.querySelector('.hero-copy')),
                         cards: [...document.querySelectorAll('.hero-promo')].map((node) => ({ box: rect(node), style: style(node), image: node.querySelector('img') ? rect(node.querySelector('img')) : null, action: rect(node.querySelector('a')), actionStyle: style(node.querySelector('a')) })),
                         referenceStyle: style(document.querySelector('.hero-cta .btn-ghost') || document.querySelector('.hero-cta .btn')),
@@ -50,11 +51,12 @@ try {
                     };
                 });
                 const label = `${count} promos, ${width}px, ${theme}`;
-                assert.ok(data.overflow <= 1, `${label}: page overflow ${data.overflow}`);
+                const layoutWidth = Math.max(width, data.minimumWidth);
+                assert.ok(data.overflow <= layoutWidth - width + 1, `${label}: unexpected page overflow ${data.overflow}`);
                 assert.equal(data.cards.length, count, label);
                 assert.equal(data.issueIndex, count === 0, label);
                 for (const card of data.cards) {
-                    assert.ok(card.box.x >= 0 && card.box.right <= width, `${label}: card bounds`);
+                    assert.ok(card.box.x >= 0 && card.box.right <= layoutWidth, `${label}: card bounds`);
                     assert.equal(card.style['background-image'], 'none', label);
                     for (const side of ['top', 'right', 'bottom', 'left']) {
                         assert.equal(card.style[`padding-${side}`], '24px', label);

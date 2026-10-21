@@ -16,7 +16,8 @@
     "build:pages": "npm run generate && node scripts/build-pages.js",
     "check": "node bin/cli.js check",
     "test": "node --test",
-    "docs:screenshots": "npm run generate && node scripts/capture-readme-screenshots.js"
+    "docs:screenshots": "npm run generate && node scripts/capture-readme-screenshots.js",
+    "verify:hero": "node scripts/verify-hero-promos.js"
   },
   "devDependencies": {
     "ajv": "^8.20.0",
