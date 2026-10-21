@@ -2,28 +2,119 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "hero content",
   "type": "object",
-  "required": ["name", "tagline"],
+  "required": [
+    "name",
+    "tagline"
+  ],
   "properties": {
-    "eyebrow": { "type": "string" },
-    "name": { "type": "string" },
-    "nameHighlight": { "type": "string", "description": "Part of the name rendered in the brand color, e.g. a surname initial." },
-    "tagline": { "type": "string" },
-    "avatar": { "type": "string", "description": "Optional module-relative image path, resolved via ctx.asset()." },
+    "eyebrow": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "nameHighlight": {
+      "type": "string",
+      "description": "Part of the name rendered in the brand color, e.g. a surname initial."
+    },
+    "tagline": {
+      "type": "string"
+    },
+    "avatar": {
+      "type": "string",
+      "description": "Optional module-relative image path, resolved via ctx.asset()."
+    },
     "ctas": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["label", "href"],
+        "required": [
+          "label",
+          "href"
+        ],
         "properties": {
-          "label": { "type": "string" },
-          "shortLabel": { "type": "string", "description": "Shown instead of label under ~600px. Defaults to label." },
-          "href": { "type": "string" },
-          "icon": { "type": "string", "description": "Tabler icon class, e.g. ti-mail" },
-          "variant": { "type": "string", "enum": ["opposite", "ghost"] },
-          "external": { "type": "boolean" }
+          "label": {
+            "type": "string"
+          },
+          "shortLabel": {
+            "type": "string",
+            "description": "Shown instead of label under ~600px. Defaults to label."
+          },
+          "href": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Tabler icon class, e.g. ti-mail"
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "opposite",
+              "ghost"
+            ]
+          },
+          "external": {
+            "type": "boolean"
+          }
         }
       }
     },
-    "issueIndexLabel": { "type": "string" }
+    "issueIndexLabel": {
+      "type": "string"
+    },
+    "promos": {
+      "type": "array",
+      "maxItems": 2,
+      "description": "Up to two featured projects, in display order. Three or more projects need a separate section.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "description",
+          "action"
+        ],
+        "properties": {
+          "image": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Module-relative authored image path."
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "eyebrow": {
+            "type": "string"
+          },
+          "action": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "label",
+              "href"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "href": {
+                "type": "string",
+                "pattern": "^(https?://|/|#)"
+              },
+              "external": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
