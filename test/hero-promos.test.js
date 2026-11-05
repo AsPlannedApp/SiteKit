@@ -73,5 +73,5 @@ test('promo headings and actions remain accessible with multiple projects', () =
     }
     assert.equal((html.match(/target="_blank" rel="noopener noreferrer"/g) || []).length, 1);
     assert.match(html, /href="\/read">Read<\/a>/);
-    assert.match(html, /aria-label="Featured projects"/);
+    assert.match(html, /class="hero-promos" role="group" aria-label="Featured projects"/);
 });
